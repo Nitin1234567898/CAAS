@@ -16,7 +16,7 @@ A modern, full-stack chatbot platform that allows users to create, customize, an
 
 ### Frontend
 - **React 18** with TypeScript
-- **Tailwind CSS** for styling
+- **regukar CSS** for styling
 - **React Router** for navigation
 - **Clerk** for authentication
 

@@ -26,19 +26,19 @@ const IntegrationGuide: React.FC = () => {
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <h3 className="font-medium text-blue-900 mb-2">Step 1: Get Your API Key</h3>
                   <ol className="text-sm text-blue-800 space-y-1">
-                    <li>1. Log into your chatbot dashboard</li>
-                    <li>2. Find your chatbot in the list</li>
-                    <li>3. Copy the API key (starts with <code>cb_live_</code>)</li>
-                    <li>4. Note your chatbot ID</li>
+                    <li> Log into your chatbot dashboard</li>
+                    <li> Find your chatbot in the list</li>
+                    <li> Copy the API key (starts with <code>cb_live_</code>)</li>
+                    <li> Note your chatbot ID</li>
                   </ol>
                 </div>
                 
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <h3 className="font-medium text-green-900 mb-2">Step 2: Choose Integration Method</h3>
                   <ul className="text-sm text-green-800 space-y-1">
-                    <li>• <strong>HTML/JavaScript</strong> - For basic websites</li>
-                    <li>• <strong>React Component</strong> - For React applications</li>
-                    <li>• <strong>Custom Implementation</strong> - For advanced users</li>
+                    <li> <strong>HTML/JavaScript</strong> - For basic websites</li>
+                    <li> <strong>React Component</strong> - For React applications</li>
+                    <li> <strong>Custom Implementation</strong> - For advanced users</li>
                   </ul>
                 </div>
               </div>
