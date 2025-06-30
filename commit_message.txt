@@ -1,1 +1,1 @@
-feat: Implement API key authentication and status check for chatbot function
+feat: Generate and save API key for new chatbots

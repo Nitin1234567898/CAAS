@@ -50,6 +50,9 @@ const Dashboard: React.FC = () => {
     if (!user) return;
 
     try {
+      // Generate a unique API key
+      const newApiKey = `cb_live_${[...Array(24)].map(() => Math.random().toString(36)[2]).join('')}`;
+
       const { data, error } = await supabase
         .from('chatbots')
         .insert({
@@ -57,7 +60,8 @@ const Dashboard: React.FC = () => {
           description: newChatbot.description,
           personality: newChatbot.personality,
           knowledge_base: newChatbot.knowledgeBase,
-          user_id: user.id
+          user_id: user.id,
+          api_key: newApiKey, // Save the new API key
         })
         .select()
         .single();
