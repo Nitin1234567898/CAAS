@@ -3,7 +3,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-api-key',
   'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
 }
 
@@ -17,18 +17,17 @@ serve(async (req) => {
   }
 
   try {
-    // Get authorization header and API key
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    // Get API key
+    const apiKey = req.headers.get('X-Api-Key');
+    if (!apiKey) {
       return new Response(
-        JSON.stringify({ error: 'Missing or invalid authorization header' }),
+        JSON.stringify({ error: 'Missing API key' }),
         { 
           status: 401, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
         }
       );
     }
-    const apiKey = authHeader.replace('Bearer ', '');
     
     // Get request body
     const body = await req.json()
@@ -47,18 +46,21 @@ serve(async (req) => {
       )
     }
 
-    // Create Supabase client
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')
-    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')
-    
-    console.log('Supabase URL exists:', !!supabaseUrl)
-    console.log('Supabase Anon Key exists:', !!supabaseAnonKey)
-    
-    const supabaseClient = createClient(supabaseUrl ?? '', supabaseAnonKey ?? '')
+    // Create a Supabase client with the Service Role Key to bypass RLS
+    const supabaseAdminClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
 
     // Get chatbot configuration from database using the API key for authentication
     console.log('Fetching chatbot with ID:', chatbotId)
-    const { data: chatbot, error: chatbotError } = await supabaseClient
+    const { data: chatbot, error: chatbotError } = await supabaseAdminClient
       .from('chatbots')
       .select('*')
       .eq('id', chatbotId)
@@ -161,7 +163,7 @@ Please respond as this chatbot would, maintaining the specified personality and 
 
     // Save chat message to database
     console.log('Saving chat message...')
-    const { error: saveError } = await supabaseClient
+    await supabaseAdminClient
       .from('chat_messages')
       .insert({
         chatbot_id: chatbotId,
@@ -170,13 +172,13 @@ Please respond as this chatbot would, maintaining the specified personality and 
         user_id: userId
       })
 
-    if (saveError) {
-      console.error('Error saving chat message:', saveError)
+    if (chatbotError) {
+      console.error('Error saving chat message:', chatbotError)
     }
 
     // Update message count
     console.log('Updating message count...')
-    await supabaseClient
+    await supabaseAdminClient
       .from('chatbots')
       .update({ message_count: (chatbot.message_count || 0) + 1 })
       .eq('id', chatbotId)

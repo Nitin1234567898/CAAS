@@ -380,6 +380,7 @@ const Dashboard: React.FC = () => {
           <ChatInterface
             chatbotId={selectedChatbot.id}
             chatbotName={selectedChatbot.name}
+            apiKey={selectedChatbot.api_key}
             onClose={closeChatModal}
           />
         )}
@@ -475,7 +476,7 @@ async function sendMessage() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': \`Bearer \${API_KEY}\`
+        'X-Api-Key': API_KEY
       },
       body: JSON.stringify({
         chatbotId: CHATBOT_ID,
@@ -535,7 +536,7 @@ function addMessage(text, sender) {
                     </p>
                     <pre className="text-sm bg-white p-2 rounded">
 {`Content-Type: application/json
-Authorization: Bearer ${selectedChatbot.api_key}`}
+X-Api-Key: ${selectedChatbot.api_key}`}
                     </pre>
                     <p className="text-sm text-gray-600 mt-2">
                       <strong>Request Body:</strong>

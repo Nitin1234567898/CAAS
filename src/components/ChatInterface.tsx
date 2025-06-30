@@ -13,9 +13,10 @@ interface ChatInterfaceProps {
   chatbotId: string;
   chatbotName: string;
   onClose: () => void;
+  apiKey: string;
 }
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, onClose }) => {
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, onClose, apiKey }) => {
   const { user } = useUser();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -47,6 +48,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
     try {
       // Call Supabase Edge Function
       const { data, error } = await supabase.functions.invoke('chatbot-chat', {
+        headers: {
+          'X-Api-Key': apiKey,
+        },
         body: {
           chatbotId,
           message: inputMessage,
