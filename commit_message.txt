@@ -1,1 +1,1 @@
-feat: Add logo and update navbar
+feat: Add dashboard link for signed-in users on homepage

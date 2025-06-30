@@ -143,6 +143,11 @@ const HomePage: React.FC = () => {
               Start Building Now
             </Link>
           </SignedOut>
+          <SignedIn>
+            <Link to="/dashboard" className="btn bg-white text-primary-color hover:bg-gray-100">
+              Go to Your Dashboard
+            </Link>
+          </SignedIn>
         </div>
       </section>
     </div>
