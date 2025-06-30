@@ -17,7 +17,18 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Function started')
+    // Get authorization header and API key
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Missing or invalid authorization header' }),
+        { 
+          status: 401, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+    const apiKey = authHeader.replace('Bearer ', '');
     
     // Get request body
     const body = await req.json()
@@ -45,22 +56,33 @@ serve(async (req) => {
     
     const supabaseClient = createClient(supabaseUrl ?? '', supabaseAnonKey ?? '')
 
-    // Get chatbot configuration from database
-    console.log('Fetching chatbot with ID:', chatbotId, 'and user ID:', userId)
+    // Get chatbot configuration from database using the API key for authentication
+    console.log('Fetching chatbot with ID:', chatbotId)
     const { data: chatbot, error: chatbotError } = await supabaseClient
       .from('chatbots')
       .select('*')
       .eq('id', chatbotId)
-      .eq('user_id', userId)
+      .eq('api_key', apiKey) // Authenticate using the API key
       .single()
 
     console.log('Chatbot query result:', { chatbot, error: chatbotError })
 
     if (chatbotError || !chatbot) {
       return new Response(
-        JSON.stringify({ error: 'Chatbot not found', details: chatbotError }),
+        JSON.stringify({ error: 'Chatbot not found or API key is invalid' }),
         { 
-          status: 404, 
+          status: 401, // Use 401 for unauthorized
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      )
+    }
+
+    // Additionally, check if the chatbot is active
+    if (chatbot.status !== 'active') {
+      return new Response(
+        JSON.stringify({ error: 'This chatbot is currently inactive' }),
+        { 
+          status: 403, // Forbidden
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
         }
       )
