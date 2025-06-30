@@ -14,9 +14,7 @@ const Navbar: React.FC = () => {
         <div className="navbar-content">
           {/* Logo */}
           <Link to="/" className="logo">
-            <div className="logo-icon">
-              <span>C</span>
-            </div>
+            <img src="/logo.png" alt="ChatBot Service Logo" className="logo-img" />
             <div className="logo-text">
               <span className="logo-title">ChatBot Service</span>
               <div className="logo-subtitle">AI-Powered Solutions</div>
