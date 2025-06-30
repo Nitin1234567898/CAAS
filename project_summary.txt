@@ -1,0 +1,78 @@
+Project Summary: AI-Powered Chatbot Service
+
+This project is a full-stack application designed to allow users to create, manage, and integrate AI chatbots into their websites. It leverages a modern web stack with a React frontend, Supabase backend, and Clerk for authentication.
+
+---
+
+I. Project Structure Overview
+
+- **Root Directory (D:/CB/):** Contains configuration files, package managers, and top-level documentation.
+    - `.gitignore`: Specifies files/directories to be ignored by Git (e.g., `node_modules`, `.env`).
+    - `package.json`, `package-lock.json`: Defines project dependencies and scripts for Node.js.
+    - `tsconfig.json`: TypeScript configuration.
+    - `README.md`, `DEPLOYMENT_GUIDE.md`, `INTEGRATION_GUIDE.md`, `SETUP_GUIDE.md`: Project documentation.
+    - `env.example`: Template for environment variables.
+
+- **`public/`:** Static assets served directly by the web server.
+    - `index.html`: The main HTML file, entry point for the React application.
+    - `logo.png`, `manifest.json`: Application icons and web app manifest.
+
+- **`src/`:** Contains the core React frontend application.
+    - `App.tsx`: The main React component that sets up routing and global layout.
+    - `index.tsx`: The entry point for the React application, renders `App.tsx` into `index.html`.
+    - `index.css`: Global CSS styles for the application (uses utility-first classes, likely Tailwind CSS).
+    - **`src/components/`:** Reusable UI components.
+        - `ChatInterface.tsx`: The interactive chat modal for testing and using chatbots. Handles message display, input, and communication with the backend.
+        - `Navbar.tsx`: The application's navigation bar.
+    - **`src/lib/`:** Utility files and configurations.
+        - `supabase.ts`: Initializes and configures the Supabase client, providing an interface to interact with the Supabase backend (database, functions, auth).
+    - **`src/pages/`:** Top-level views/pages of the application.
+        - `Dashboard.tsx`: Displays a user's created chatbots, allows management (create, activate/deactivate), and provides access to chat/integration modals.
+        - `HomePage.tsx`: The landing page, introducing the service and guiding users to sign up/log in or go to their dashboard.
+        - `IntegrationGuide.tsx`: Provides instructions and code snippets for integrating chatbots into external websites.
+        - `LoginPage.tsx`: Handles user authentication (login/signup) via Clerk.
+
+- **`supabase/`:** Contains backend-related files for Supabase.
+    - `schema.sql`: SQL script defining the database tables and relationships (e.g., `chatbots` table).
+    - **`supabase/functions/`:** Supabase Edge Functions (serverless functions).
+        - `chatbot-chat/index.ts`: The core AI chatbot logic. This function receives user messages, processes them (likely interacts with an AI model), and returns a bot response. It's invoked by the frontend.
+        - `test/index.ts`: A placeholder or example Edge Function.
+
+---
+
+II. How Everything Works (Application Flow & Key Technologies)
+
+1.  **Frontend (React & TypeScript):**
+    -   **User Interface:** Built with React components (`.tsx` files) for a dynamic and interactive user experience.
+    -   **Routing:** `react-router-dom` (implied by `Link` components) manages navigation between different pages (`/`, `/dashboard`, `/login`, `/integration-guide`).
+    -   **State Management:** `useState` and `useEffect` hooks are used for local component state and side effects.
+    -   **Styling:** `index.css` provides global styles, using utility-first CSS classes (similar to Tailwind CSS).
+    -   **Backend Communication:** The frontend communicates with Supabase for data (chatbots, user info) and invokes Supabase Edge Functions for chatbot interactions.
+
+2.  **Authentication (Clerk):**
+    -   **User Management:** Clerk handles user registration, login, and session management.
+    -   **Integration:** The `useUser` hook from `@clerk/clerk-react` provides user information (`user.id`, `user.firstName`) to frontend components.
+    -   **Security:** Clerk ensures secure authentication flows, protecting user data and access to features.
+
+3.  **Backend (Supabase):**
+    -   **Database:** Supabase provides a PostgreSQL database to store application data, such as chatbot configurations (`chatbots` table), user information (linked via `user_id`), and potentially message history. The `schema.sql` defines this structure.
+    -   **Edge Functions:** Serverless functions written in TypeScript (`.ts` files under `supabase/functions/`).
+        -   `chatbot-chat`: This is the core intelligence. When a user sends a message in the `ChatInterface`, this function is invoked. It takes the `chatbotId`, `message`, and `userId`, processes the message (e.g., sends it to an external AI API like OpenAI, processes knowledge base), and returns a response.
+    -   **Authentication:** Supabase integrates with Clerk to manage user authentication and authorization for database access.
+    -   **API:** Supabase automatically generates APIs (REST, GraphQL) for your database, which the frontend uses via the `supabase` client.
+
+4.  **Data Flow Example (Sending a Chat Message):**
+    -   User types a message in `ChatInterface.tsx`.
+    -   `sendMessage` function in `ChatInterface.tsx` is called.
+    -   It uses `supabase.functions.invoke('chatbot-chat', { body: ... })` to call the Supabase Edge Function.
+    -   The `chatbot-chat/index.ts` function receives the message, processes it, and returns a response.
+    -   `ChatInterface.tsx` receives the response and displays it in the chat history.
+
+---
+
+III. Key Technologies Used
+
+-   **Frontend:** React 18, TypeScript, React Router, Clerk (for authentication).
+-   **Styling:** Utility-first CSS (likely Tailwind CSS, based on class names).
+-   **Backend:** Supabase (PostgreSQL Database, Edge Functions), Clerk (for authentication).
+-   **Development Tools:** Node.js, npm/yarn, Git.

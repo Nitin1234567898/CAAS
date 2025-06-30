@@ -18,6 +18,8 @@ const Dashboard: React.FC = () => {
     knowledgeBase: ''
   });
 
+  const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
+
   // Fetch chatbots from Supabase
   const fetchChatbots = useCallback(async () => {
     if (!user) return;
@@ -405,7 +407,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div>
                       <span className="font-medium">Supabase URL:</span> 
-                      <code className="ml-2 bg-white px-2 py-1 rounded text-sm">https://your-project-ref.supabase.co</code>
+                      <code className="ml-2 bg-white px-2 py-1 rounded text-sm">{supabaseUrl}</code>
                     </div>
                   </div>
                 </div>
@@ -434,7 +436,7 @@ const Dashboard: React.FC = () => {
 // Replace with your actual values
 const API_KEY = '${selectedChatbot.api_key}';
 const CHATBOT_ID = '${selectedChatbot.id}';
-const SUPABASE_URL = 'https://your-project-ref.supabase.co';
+const SUPABASE_URL = '${supabaseUrl}';
 
 let isChatbotOpen = false;
 const userId = 'user_' + Math.random().toString(36).substr(2, 9);
@@ -519,7 +521,7 @@ function addMessage(text, sender) {
                   <h3 className="text-lg font-medium text-gray-900 mb-2">API Endpoint</h3>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <p className="text-sm text-gray-600 mb-2">
-                      <strong>URL:</strong> <code>https://your-project-ref.supabase.co/functions/v1/chatbot-chat</code>
+                      <strong>URL:</strong> <code>{supabaseUrl}/functions/v1/chatbot-chat</code>
                     </p>
                     <p className="text-sm text-gray-600 mb-2">
                       <strong>Method:</strong> POST
