@@ -2,40 +2,45 @@ import React, { useState } from 'react';
 
 const IntegrationGuide: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'html' | 'react'>('html');
+  const [showHtmlCode, setShowHtmlCode] = useState(false);
+  const [showReactCode, setShowReactCode] = useState(false);
+
+  const handleBtnMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    btn.style.setProperty('--x', `${x}%`);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto py-8">
+    <div className="integration-guide-root">
+      <div className="integration-guide-container">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Integration Guide
-          </h1>
-          <p className="text-gray-600">
+        <div className="integration-guide-header">
+          <h1 className="integration-guide-title">Integration Guide</h1>
+          <p className="integration-guide-desc">
             Learn how to integrate your custom chatbots into your website
           </p>
         </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="integration-guide-grid">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="integration-guide-main">
             {/* Quick Start */}
-            <div className="card">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">🚀 Quick Start</h2>
-              <div className="space-y-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="font-medium text-blue-900 mb-2">Step 1: Get Your API Key</h3>
-                  <ol className="text-sm text-blue-800 space-y-1">
+            <div className="integration-guide-card">
+              <h2 className="integration-guide-section-title">🚀 Quick Start</h2>
+              <div className="integration-guide-steps">
+                <div className="integration-guide-step blue">
+                  <h3 className="integration-guide-step-title">Step 1: Get Your API Key</h3>
+                  <ol className="integration-guide-step-list">
                     <li> Log into your chatbot dashboard</li>
                     <li> Find your chatbot in the list</li>
                     <li> Copy the API key (starts with <code>cb_live_</code>)</li>
                     <li> Note your chatbot ID</li>
                   </ol>
                 </div>
-                
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <h3 className="font-medium text-green-900 mb-2">Step 2: Choose Integration Method</h3>
-                  <ul className="text-sm text-green-800 space-y-1">
+                <div className="integration-guide-step green">
+                  <h3 className="integration-guide-step-title">Step 2: Choose Integration Method</h3>
+                  <ul className="integration-guide-step-list">
                     <li> <strong>HTML/JavaScript</strong> - For basic websites</li>
                     <li> <strong>React Component</strong> - For React applications</li>
                     <li> <strong>Custom Implementation</strong> - For advanced users</li>
@@ -43,51 +48,87 @@ const IntegrationGuide: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Integration Method Tabs */}
-            <div className="card">
-              <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">📋 Choose Your Integration Method</h2>
-                
-                {/* Tab Buttons */}
-                <div className="flex space-x-2 mb-6">
+            {/* Integration Method Choice */}
+            <div className="integration-guide-card">
+              <h2 className="integration-guide-section-title">📋 Choose Your Integration Method</h2>
+              <div className="integration-guide-choice-btns">
+                <button
+                  onClick={(e) => {
+                    setShowHtmlCode((prev) => !prev);
+                    setShowReactCode(false);
+                    // Ripple effect
+                    const btn = e.currentTarget;
+                    const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                    if (ripple) {
+                      ripple.classList.remove('show');
+                      void ripple.offsetWidth; // trigger reflow
+                      ripple.classList.add('show');
+                      const rect = btn.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      ripple.style.left = `${x}px`;
+                      ripple.style.top = `${y}px`;
+                    }
+                  }}
+                  className={"integration-guide-choice-btn gradient-cursor-btn html-btn" + (showHtmlCode ? " active" : "")}
+                  onMouseMove={handleBtnMouseMove}
+                >
+                  <div className="integration-guide-btn-label-wrapper" style={{marginBottom: '2.2rem', width: '100%'}}>
+                    <span className="integration-guide-btn-label">HTML/JS</span>
+                  </div>
+                  <span className="integration-guide-btn-desc">Embed the chatbot in any website using a simple HTML/JavaScript snippet.</span>
+                  <span className="sparkle-effect"></span>
+                  <span className="ripple-effect"></span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    setShowReactCode((prev) => !prev);
+                    setShowHtmlCode(false);
+                    // Ripple effect
+                    const btn = e.currentTarget;
+                    const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                    if (ripple) {
+                      ripple.classList.remove('show');
+                      void ripple.offsetWidth;
+                      ripple.classList.add('show');
+                      const rect = btn.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      ripple.style.left = `${x}px`;
+                      ripple.style.top = `${y}px`;
+                    }
+                  }}
+                  className={"integration-guide-choice-btn gradient-cursor-btn react-btn" + (showReactCode ? " active" : "")}
+                  onMouseMove={handleBtnMouseMove}
+                >
+                  <div className="integration-guide-btn-label-wrapper" style={{marginBottom: '2.2rem', width: '100%'}}>
+                    <span className="integration-guide-btn-label">React</span>
+                  </div>
+                  <span className="integration-guide-btn-desc">Integrate the chatbot as a React component in your React app.</span>
+                  <span className="sparkle-effect"></span>
+                  <span className="ripple-effect"></span>
+                </button>
+              </div>
+              <div className="integration-guide-choice-codearea">
+                { (showHtmlCode || showReactCode) && (
                   <button
-                    onClick={() => setActiveTab('html')}
-                    className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
-                      activeTab === 'html'
-                        ? 'bg-primary-color text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                    className="integration-guide-back-link"
+                    onClick={() => {
+                      setShowHtmlCode(false);
+                      setShowReactCode(false);
+                    }}
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    HTML/JavaScript
+                    &larr; Back to integration method choice
                   </button>
-                  <button
-                    onClick={() => setActiveTab('react')}
-                    className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
-                      activeTab === 'react'
-                        ? 'bg-primary-color text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
-                    </svg>
-                    React Component
-                  </button>
-                </div>
-
-                {/* Tab Content */}
-                {activeTab === 'html' && (
+                )}
+                {showHtmlCode && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">HTML/JavaScript Integration</h3>
-                    <p className="text-gray-600 mb-4">
+                    <h3 className="integration-guide-code-title">HTML/JavaScript Integration</h3>
+                    <p className="integration-guide-code-desc">
                       Add this code to your website's HTML to embed your chatbot:
                     </p>
-                    <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
-                      <pre className="text-sm">
+                    <div className="integration-guide-code-block html">
+                      <pre>
 {`<!-- Add this to your website -->
 <div id="chatbot-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
   <button id="chatbot-toggle" style="width: 60px; height: 60px; border-radius: 50%; background: #007bff; color: white; border: none; cursor: pointer; font-size: 24px;">💬</button>
@@ -195,15 +236,14 @@ function addMessage(text, sender) {
                     </div>
                   </div>
                 )}
-
-                {activeTab === 'react' && (
+                {showReactCode && (
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">React Integration</h3>
-                    <p className="text-gray-600 mb-4">
+                    <h3 className="integration-guide-code-title">React Integration</h3>
+                    <p className="integration-guide-code-desc">
                       For React applications, create a chatbot component:
                     </p>
-                    <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
-                      <pre className="text-sm">
+                    <div className="integration-guide-code-block react">
+                      <pre>
 {`import React, { useState } from 'react';
 
 const ChatbotWidget = ({ apiKey, chatbotId, supabaseUrl }) => {
@@ -374,10 +414,9 @@ const ChatbotWidget = ({ apiKey, chatbotId, supabaseUrl }) => {
 export default ChatbotWidget;`}
                       </pre>
                     </div>
-                    
-                    <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                      <h4 className="font-medium text-blue-900 mb-2">Usage in Your React App:</h4>
-                      <pre className="text-sm text-blue-800">
+                    <div className="integration-guide-usage-block">
+                      <h4 className="integration-guide-usage-title">Usage in Your React App:</h4>
+                      <pre>
 {`import ChatbotWidget from './ChatbotWidget';
 
 function App() {
@@ -401,29 +440,26 @@ function App() {
                 )}
               </div>
             </div>
-
             {/* API Documentation */}
-            <div className="card">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">🔧 API Documentation</h2>
-              <div className="space-y-4">
+            <div className="integration-guide-card">
+              <h2 className="integration-guide-section-title">🔧 API Documentation</h2>
+              <div className="integration-guide-api-docs">
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Endpoint</h3>
-                  <code className="bg-gray-100 px-2 py-1 rounded text-sm">
+                  <h3 className="integration-guide-api-title">Endpoint</h3>
+                  <code className="integration-guide-api-code">
                     POST https://your-project-ref.supabase.co/functions/v1/chatbot-chat
                   </code>
                 </div>
-                
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Headers</h3>
-                  <pre className="bg-gray-100 p-3 rounded text-sm">
+                  <h3 className="integration-guide-api-title">Headers</h3>
+                  <pre className="integration-guide-api-pre">
 {`Content-Type: application/json
 Authorization: Bearer YOUR_API_KEY`}
                   </pre>
                 </div>
-                
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Request Body</h3>
-                  <pre className="bg-gray-100 p-3 rounded text-sm">
+                  <h3 className="integration-guide-api-title">Request Body</h3>
+                  <pre className="integration-guide-api-pre">
 {`{
   "chatbotId": "your-chatbot-uuid",
   "message": "User's message here",
@@ -431,10 +467,9 @@ Authorization: Bearer YOUR_API_KEY`}
 }`}
                   </pre>
                 </div>
-                
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Response</h3>
-                  <pre className="bg-gray-100 p-3 rounded text-sm">
+                  <h3 className="integration-guide-api-title">Response</h3>
+                  <pre className="integration-guide-api-pre">
 {`{
   "response": "AI-generated response from your chatbot",
   "chatbot": {
@@ -448,43 +483,11 @@ Authorization: Bearer YOUR_API_KEY`}
               </div>
             </div>
           </div>
-
           {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Quick Links */}
-            <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Links</h3>
-              <div className="space-y-2">
-                <button 
-                  onClick={() => setActiveTab('html')}
-                  className={`w-full text-left p-2 rounded transition-colors ${
-                    activeTab === 'html' 
-                      ? 'bg-primary-color text-white' 
-                      : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
-                  }`}
-                >
-                  📋 HTML/JavaScript
-                </button>
-                <button 
-                  onClick={() => setActiveTab('react')}
-                  className={`w-full text-left p-2 rounded transition-colors ${
-                    activeTab === 'react' 
-                      ? 'bg-primary-color text-white' 
-                      : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
-                  }`}
-                >
-                  ⚛️ React Component
-                </button>
-                <a href="#api-docs" className="block text-blue-600 hover:text-blue-800 p-2 rounded hover:bg-blue-50">
-                  🔧 API Documentation
-                </a>
-              </div>
-            </div>
-
-            {/* Pro Tips */}
-            <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">💡 Pro Tips</h3>
-              <ul className="text-sm text-gray-600 space-y-2">
+          <div className="integration-guide-sidebar">
+            <div className="integration-guide-card">
+              <h3 className="integration-guide-sidebar-title">💡 Pro Tips</h3>
+              <ul className="integration-guide-tips-list">
                 <li>• Replace <code>your-project-ref</code> with your actual Supabase project reference</li>
                 <li>• Customize the styling to match your website's design</li>
                 <li>• Add error handling for better user experience</li>
@@ -492,22 +495,20 @@ Authorization: Bearer YOUR_API_KEY`}
                 <li>• Test the integration thoroughly before going live</li>
               </ul>
             </div>
-
-            {/* Troubleshooting */}
-            <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">🚨 Troubleshooting</h3>
-              <div className="space-y-3">
+            <div className="integration-guide-card">
+              <h3 className="integration-guide-sidebar-title"> Troubleshooting</h3>
+              <div className="integration-guide-troubleshooting-list">
                 <div>
-                  <h4 className="font-medium text-gray-800">CORS Errors</h4>
-                  <p className="text-sm text-gray-600">Check Supabase allowed origins and verify API endpoints</p>
+                  <h4 className="integration-guide-troubleshooting-title">CORS Errors</h4>
+                  <p className="integration-guide-troubleshooting-desc">Check Supabase allowed origins and verify API endpoints</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-800">Authentication Errors</h4>
-                  <p className="text-sm text-gray-600">Verify your API key and ensure you're using the Bearer prefix</p>
+                  <h4 className="integration-guide-troubleshooting-title">Authentication Errors</h4>
+                  <p className="integration-guide-troubleshooting-desc">Verify your API key and ensure you're using the Bearer prefix</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-800">Chatbot Not Responding</h4>
-                  <p className="text-sm text-gray-600">Check that your chatbot is active and the ID is correct</p>
+                  <h4 className="integration-guide-troubleshooting-title">Chatbot Not Responding</h4>
+                  <p className="integration-guide-troubleshooting-desc">Check that your chatbot is active and the ID is correct</p>
                 </div>
               </div>
             </div>
