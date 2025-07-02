@@ -754,6 +754,8 @@ code {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  height: auto;
+  justify-content: flex-start;
 }
 .integration-guide-sidebar {
   display: flex;
@@ -812,8 +814,9 @@ code {
 .integration-guide-choice-btns {
   display: flex;
   gap: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   justify-content: flex-start;
+  align-items: flex-start;
 }
 .integration-guide-choice-btn {
   position: relative;
@@ -887,7 +890,7 @@ code {
   display: none;
 }
 .integration-guide-choice-codearea {
-  min-height: 340px;
+  min-height: 0;
   margin-top: 1.2rem;
   display: flex;
   flex-direction: column;

@@ -128,8 +128,7 @@ const IntegrationGuide: React.FC = () => {
                       Add this code to your website's HTML to embed your chatbot:
                     </p>
                     <div className="integration-guide-code-block html">
-                      <pre>
-{`<!-- Add this to your website -->
+                      <pre>{`<!-- Add this to your website -->
 <div id="chatbot-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
   <button id="chatbot-toggle" style="width: 60px; height: 60px; border-radius: 50%; background: #007bff; color: white; border: none; cursor: pointer; font-size: 24px;">💬</button>
   
@@ -231,8 +230,11 @@ function addMessage(text, sender) {
   messagesContainer.appendChild(messageDiv);
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
-</script>`}
-                      </pre>
+</script>`}</pre>
+                    </div>
+                    <div className="integration-guide-usage-block">
+                      <h4 className="integration-guide-usage-title">Usage Tip:</h4>
+                      <pre>{`Place the above HTML and script at the end of your <body> tag for best results.`}</pre>
                     </div>
                   </div>
                 )}
