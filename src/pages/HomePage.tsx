@@ -144,8 +144,59 @@ const HomePage: React.FC = () => {
             </Link>
           </SignedOut>
           <SignedIn>
-            <Link to="/dashboard" className="btn bg-white text-primary-color hover:bg-gray-100">
+            <Link
+              to="/dashboard"
+              style={{
+                position: 'relative',
+                minWidth: 120,
+                minHeight: 36,
+                padding: '0.7rem 1.3rem',
+                borderRadius: 10,
+                fontSize: '1.02rem',
+                fontWeight: 600,
+                background: 'linear-gradient(120deg, #2563eb 40%, #6366f1 100%)',
+                color: '#fff',
+                border: 'none',
+                boxShadow: '0 2px 8px 0 rgb(37 99 235 / 0.10)',
+                cursor: 'pointer',
+                transition: 'background 0.2s, transform 0.15s, box-shadow 0.2s',
+                overflow: 'hidden',
+                zIndex: 1,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundSize: '200% 200%',
+                backgroundPosition: '0% 50%',
+                textDecoration: 'none'
+              }}
+              onMouseMove={e => {
+                const btn = e.currentTarget;
+                const rect = btn.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                btn.style.setProperty('--x', `${x}%`);
+                btn.style.backgroundPosition = `${x}% 50%`;
+              }}
+              onClick={e => {
+                const btn = e.currentTarget;
+                let ripple = btn.querySelector('.ripple-effect');
+                if (!ripple) {
+                  ripple = document.createElement('span');
+                  ripple.className = 'ripple-effect';
+                  btn.appendChild(ripple);
+                }
+                const rippleEl = ripple as HTMLElement;
+                rippleEl.classList.remove('show');
+                void rippleEl.offsetWidth;
+                rippleEl.classList.add('show');
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                rippleEl.style.left = `${x}px`;
+                rippleEl.style.top = `${y}px`;
+              }}
+            >
               Go to Your Dashboard
+              <span className="ripple-effect"></span>
             </Link>
           </SignedIn>
         </div>

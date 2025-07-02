@@ -40,11 +40,28 @@ const LoginPage: React.FC = () => {
         <div className="text-center">
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
-            <button 
-              onClick={() => window.location.href = '/signup'}
-              className="text-primary-color hover:text-primary-hover font-medium bg-transparent border-none cursor-pointer"
+            <button
+              onClick={(e) => {
+                window.location.href = '/signup';
+                // Ripple effect
+                const btn = e.currentTarget;
+                const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                if (ripple) {
+                  ripple.classList.remove('show');
+                  void ripple.offsetWidth;
+                  ripple.classList.add('show');
+                  const rect = btn.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  ripple.style.left = `${x}px`;
+                  ripple.style.top = `${y}px`;
+                }
+              }}
+              className="fancy-btn"
+              style={{fontSize: '1rem', padding: '0.5rem 1.2rem', minWidth: 'unset', minHeight: 'unset'}}
             >
               Sign up for free
+              <span className="ripple-effect"></span>
             </button>
           </p>
         </div>

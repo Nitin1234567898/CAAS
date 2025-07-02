@@ -196,11 +196,27 @@ const Dashboard: React.FC = () => {
         <div className="card">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold text-gray-900">Your Chatbots</h2>
-            <button 
-              onClick={() => setShowCreateModal(true)}
-              className="btn"
+            <button
+              onClick={(e) => {
+                setShowCreateModal(true);
+                // Ripple effect
+                const btn = e.currentTarget;
+                const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                if (ripple) {
+                  ripple.classList.remove('show');
+                  void ripple.offsetWidth;
+                  ripple.classList.add('show');
+                  const rect = btn.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  ripple.style.left = `${x}px`;
+                  ripple.style.top = `${y}px`;
+                }
+              }}
+              className="fancy-btn"
             >
-              Create New Chatbot
+              + New Chatbot
+              <span className="ripple-effect"></span>
             </button>
           </div>
 
@@ -252,16 +268,48 @@ const Dashboard: React.FC = () => {
                             className="input bg-gray-50 text-sm"
                           />
                           <button 
-                            onClick={() => copyApiKey(chatbot.api_key)}
-                            className="btn btn-secondary text-sm px-3 py-2"
+                            onClick={(e) => {
+                              copyApiKey(chatbot.api_key);
+                              // Ripple effect
+                              const btn = e.currentTarget;
+                              const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                              if (ripple) {
+                                ripple.classList.remove('show');
+                                void ripple.offsetWidth;
+                                ripple.classList.add('show');
+                                const rect = btn.getBoundingClientRect();
+                                const x = e.clientX - rect.left;
+                                const y = e.clientY - rect.top;
+                                ripple.style.left = `${x}px`;
+                                ripple.style.top = `${y}px`;
+                              }
+                            }}
+                            className="fancy-btn-small fancy-btn-secondary"
                           >
                             Copy
+                            <span className="ripple-effect"></span>
                           </button>
                           <button 
-                            onClick={() => openIntegrationModal(chatbot)}
-                            className="btn btn-secondary text-sm px-3 py-2"
+                            onClick={(e) => {
+                              openIntegrationModal(chatbot);
+                              // Ripple effect
+                              const btn = e.currentTarget;
+                              const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                              if (ripple) {
+                                ripple.classList.remove('show');
+                                void ripple.offsetWidth;
+                                ripple.classList.add('show');
+                                const rect = btn.getBoundingClientRect();
+                                const x = e.clientX - rect.left;
+                                const y = e.clientY - rect.top;
+                                ripple.style.left = `${x}px`;
+                                ripple.style.top = `${y}px`;
+                              }
+                            }}
+                            className="fancy-btn-small fancy-btn-secondary"
                           >
                             Integration Guide
+                            <span className="ripple-effect"></span>
                           </button>
                         </div>
                       </div>
@@ -269,20 +317,48 @@ const Dashboard: React.FC = () => {
 
                     <div className="flex flex-col gap-2">
                       <button
-                        onClick={() => toggleChatbotStatus(chatbot.id, chatbot.status)}
-                        className={`btn btn-sm ${
-                          chatbot.status === 'active' 
-                            ? 'btn-secondary' 
-                            : 'btn'
-                        }`}
+                        onClick={(e) => {
+                          toggleChatbotStatus(chatbot.id, chatbot.status);
+                          // Ripple effect
+                          const btn = e.currentTarget;
+                          const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                          if (ripple) {
+                            ripple.classList.remove('show');
+                            void ripple.offsetWidth;
+                            ripple.classList.add('show');
+                            const rect = btn.getBoundingClientRect();
+                            const x = e.clientX - rect.left;
+                            const y = e.clientY - rect.top;
+                            ripple.style.left = `${x}px`;
+                            ripple.style.top = `${y}px`;
+                          }
+                        }}
+                        className={chatbot.status === 'active' ? 'fancy-btn-small fancy-btn-secondary' : 'fancy-btn-small'}
                       >
                         {chatbot.status === 'active' ? 'Deactivate' : 'Activate'}
+                        <span className="ripple-effect"></span>
                       </button>
                       <button
-                        onClick={() => openChatModal(chatbot)}
-                        className="btn btn-secondary btn-sm"
+                        onClick={(e) => {
+                          openChatModal(chatbot);
+                          // Ripple effect
+                          const btn = e.currentTarget;
+                          const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                          if (ripple) {
+                            ripple.classList.remove('show');
+                            void ripple.offsetWidth;
+                            ripple.classList.add('show');
+                            const rect = btn.getBoundingClientRect();
+                            const x = e.clientX - rect.left;
+                            const y = e.clientY - rect.top;
+                            ripple.style.left = `${x}px`;
+                            ripple.style.top = `${y}px`;
+                          }
+                        }}
+                        className="fancy-btn-small fancy-btn-secondary"
                       >
                         Test Chat
+                        <span className="ripple-effect"></span>
                       </button>
                     </div>
                   </div>
@@ -358,17 +434,48 @@ const Dashboard: React.FC = () => {
 
               <div className="flex gap-3 mt-6">
                 <button
-                  onClick={() => setShowCreateModal(false)}
-                  className="btn btn-secondary flex-1"
+                  onClick={(e) => {
+                    setShowCreateModal(false);
+                    // Ripple effect
+                    const btn = e.currentTarget;
+                    const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                    if (ripple) {
+                      ripple.classList.remove('show');
+                      void ripple.offsetWidth;
+                      ripple.classList.add('show');
+                      const rect = btn.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      ripple.style.left = `${x}px`;
+                      ripple.style.top = `${y}px`;
+                    }
+                  }}
+                  className="fancy-btn flex-1"
                 >
                   Cancel
+                  <span className="ripple-effect"></span>
                 </button>
                 <button
-                  onClick={handleCreateChatbot}
-                  disabled={!newChatbot.name.trim()}
-                  className="btn flex-1 disabled:opacity-50"
+                  onClick={(e) => {
+                    handleCreateChatbot();
+                    // Ripple effect
+                    const btn = e.currentTarget;
+                    const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                    if (ripple) {
+                      ripple.classList.remove('show');
+                      void ripple.offsetWidth;
+                      ripple.classList.add('show');
+                      const rect = btn.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      ripple.style.left = `${x}px`;
+                      ripple.style.top = `${y}px`;
+                    }
+                  }}
+                  className="fancy-btn flex-1"
                 >
-                  Create Chatbot
+                  Create
+                  <span className="ripple-effect"></span>
                 </button>
               </div>
             </div>

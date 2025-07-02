@@ -105,10 +105,30 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
               <p className="chat-subtitle">AI Chatbot</p>
             </div>
           </div>
-          <button onClick={onClose} className="chat-close-btn">
+          <button
+            onClick={(e) => {
+              onClose();
+              // Ripple effect
+              const btn = e.currentTarget;
+              const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+              if (ripple) {
+                ripple.classList.remove('show');
+                void ripple.offsetWidth;
+                ripple.classList.add('show');
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+              }
+            }}
+            className="fancy-btn chat-close-btn"
+            style={{padding: '0.5rem', minWidth: 'unset', minHeight: 'unset'}}
+          >
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
+            <span className="ripple-effect"></span>
           </button>
         </div>
 
@@ -167,13 +187,29 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
               disabled={isLoading}
             />
             <button
-              onClick={sendMessage}
+              onClick={(e) => {
+                sendMessage();
+                // Ripple effect
+                const btn = e.currentTarget;
+                const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                if (ripple) {
+                  ripple.classList.remove('show');
+                  void ripple.offsetWidth;
+                  ripple.classList.add('show');
+                  const rect = btn.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  ripple.style.left = `${x}px`;
+                  ripple.style.top = `${y}px`;
+                }
+              }}
+              className="fancy-btn chat-send-btn"
               disabled={!inputMessage.trim() || isLoading}
-              className="btn chat-send-btn"
             >
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
               </svg>
+              <span className="ripple-effect"></span>
             </button>
           </div>
         </div>
