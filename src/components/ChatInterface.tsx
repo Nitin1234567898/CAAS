@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { supabase } from '../lib/supabase';
+import styles from './ChatInterface.module.css';
 
 interface Message {
   id: string;
@@ -90,19 +91,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
   };
 
   return (
-    <div className="chat-modal-overlay">
-      <div className="chat-modal">
-        {/* Header */}
-        <div className="chat-header">
-          <div className="chat-header-content">
-            <div className="chat-icon">
+    <div className={styles.chatModalOverlay}>
+      <div className={styles.chatModal}>
+        <div className={styles.chatHeader}>
+          <div className={styles.chatHeaderContent}>
+            <div className={styles.chatIcon}>
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
             <div>
-              <h3 className="chat-title">{chatbotName}</h3>
-              <p className="chat-subtitle">AI Chatbot</p>
+              <h3 className={styles.chatTitle}>{chatbotName}</h3>
+              <p className={styles.chatSubtitle}>AI Chatbot</p>
             </div>
           </div>
           <button
@@ -122,8 +122,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
                 ripple.style.top = `${y}px`;
               }
             }}
-            className="fancy-btn chat-close-btn"
-            style={{padding: '0.5rem', minWidth: 'unset', minHeight: 'unset'}}
+            className={styles.chatCloseBtn}
           >
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -133,26 +132,26 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
         </div>
 
         {/* Messages */}
-        <div className="chat-messages">
+        <div className={styles.chatMessages}>
           {messages.length === 0 ? (
-            <div className="chat-empty-state">
-              <div className="chat-empty-icon">
+            <div className={styles.chatEmptyState}>
+              <div className={styles.chatEmptyIcon}>
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </div>
-              <p className="chat-empty-title">Start chatting with {chatbotName}</p>
-              <p className="chat-empty-subtitle">Type a message below to begin</p>
+              <p className={styles.chatEmptyTitle}>Start chatting with {chatbotName}</p>
+              <p className={styles.chatEmptySubtitle}>Type a message below to begin</p>
             </div>
           ) : (
             messages.map((message) => (
               <div
                 key={message.id}
-                className={`chat-message ${message.isUser ? 'user' : ''}`}
+                className={message.isUser ? styles.chatMessage + ' ' + styles.user : styles.chatMessage}
               >
-                <div className={`chat-message-bubble ${message.isUser ? 'user' : ''}`}>
-                  <p className="chat-message-text">{message.text}</p>
-                  <p className={`chat-message-time ${message.isUser ? 'user' : ''}`}>
+                <div className={message.isUser ? styles.chatMessageBubble + ' ' + styles.user : styles.chatMessageBubble}>
+                  <p className={styles.chatMessageText}>{message.text}</p>
+                  <p className={message.isUser ? styles.chatMessageTime + ' ' + styles.user : styles.chatMessageTime}>
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
@@ -161,11 +160,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
           )}
           
           {isLoading && (
-            <div className="chat-loading">
-              <div className="chat-loading-bubble">
-                <div className="chat-loading-content">
-                  <div className="chat-spinner"></div>
-                  <span className="chat-loading-text">Typing...</span>
+            <div className={styles.chatLoading}>
+              <div className={styles.chatLoadingBubble}>
+                <div className={styles.chatLoadingContent}>
+                  <div className={styles.chatSpinner}></div>
+                  <span className={styles.chatLoadingText}>Typing...</span>
                 </div>
               </div>
             </div>
@@ -175,14 +174,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
         </div>
 
         {/* Input */}
-        <div className="chat-input-container">
-          <div className="chat-input-wrapper">
+        <div className={styles.chatInputContainer}>
+          <div className={styles.chatInputWrapper}>
             <textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="input chat-textarea"
+              className={styles.chatTextarea}
               rows={1}
               disabled={isLoading}
             />
@@ -203,7 +202,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
                   ripple.style.top = `${y}px`;
                 }
               }}
-              className="fancy-btn chat-send-btn"
+              className={styles.chatSendBtn}
               disabled={!inputMessage.trim() || isLoading}
             >
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">

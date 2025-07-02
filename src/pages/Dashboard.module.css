@@ -1,0 +1,203 @@
+/* Dashboard.module.css */
+
+.dashboardRoot {
+  background: var(--background);
+  min-height: 100vh;
+  font-family: 'Inter', 'Poppins', 'Rubik', sans-serif;
+}
+
+.dashboardHeader {
+  margin-bottom: 2rem;
+}
+
+.dashboardTitle {
+  color: var(--background-dark);
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.dashboardSubtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statsCard {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  border: 1.5px solid #e0e7ef;
+}
+
+.statsIcon {
+  background: linear-gradient(135deg, var(--primary-color) 60%, var(--accent-color) 100%);
+  color: #fff;
+  border-radius: 10px;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statsLabel {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.statsValue {
+  color: var(--background-dark);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid #e0e7ef;
+  padding: 2rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.cardTitle {
+  color: var(--background-dark);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+}
+
+.chatbotList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.chatbotCard {
+  background: var(--secondary-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid #e0e7ef;
+  padding: 1.5rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.2rem;
+  transition: box-shadow 0.18s;
+}
+
+.chatbotCard:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.chatbotName {
+  color: var(--background-dark);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.chatbotStatus {
+  font-size: 0.92rem;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 0.2rem 0.7rem;
+  background: #e0e7ff;
+  color: var(--primary-color);
+  margin-left: 0.7rem;
+}
+
+.chatbotStatus.inactive {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.chatbotDesc {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-bottom: 0.7rem;
+}
+
+.apiKeyLabel {
+  color: var(--background-dark);
+  font-size: 0.98rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.apiKeyInput {
+  background: #f1f5f9;
+  border: 1.5px solid #e0e7ef;
+  border-radius: 8px;
+  font-size: 0.98rem;
+  padding: 0.5rem 0.8rem;
+  color: var(--text-primary);
+  width: 100%;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 0.7rem;
+}
+
+.primaryBtn {
+  background: linear-gradient(90deg, var(--primary-color) 80%, var(--accent-color) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.18s, transform 0.18s;
+}
+
+.primaryBtn:hover:not(:disabled) {
+  background: linear-gradient(90deg, var(--primary-hover) 80%, var(--purple-accent) 100%);
+  transform: scale(1.04);
+}
+
+.secondaryBtn {
+  background: #fff;
+  color: var(--primary-color);
+  border: 1.5px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
+
+.secondaryBtn:hover:not(:disabled) {
+  background: var(--primary-color);
+  color: #fff;
+  transform: scale(1.04);
+}
+
+@media (max-width: 900px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    padding: 1.2rem 0.7rem;
+  }
+  .chatbotCard {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+} 

@@ -1,0 +1,206 @@
+/* ChatInterface.module.css */
+
+.chatModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatModal {
+  background: var(--background-card);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 420px;
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1.5px solid var(--primary-hover);
+}
+
+.chatHeader {
+  background: linear-gradient(90deg, var(--primary-color) 60%, var(--accent-color) 100%);
+  color: #fff;
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid var(--primary-hover);
+}
+
+.chatHeaderContent {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.chatIcon {
+  background: #fff2;
+  border-radius: 50%;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatTitle {
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.chatSubtitle {
+  font-size: 0.98rem;
+  color: #e0e7ef;
+}
+
+.chatMessages {
+  flex: 1;
+  padding: 1.2rem 1.3rem 0.7rem 1.3rem;
+  background: linear-gradient(180deg, #f1f5f9 80%, #e0e7ff 100%);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) #e0e7ef;
+}
+
+.chatMessages::-webkit-scrollbar {
+  width: 8px;
+  background: #e0e7ef;
+}
+.chatMessages::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 8px;
+}
+
+.chatMessage {
+  display: flex;
+  margin-bottom: 1.1rem;
+  align-items: flex-end;
+}
+
+.chatMessage.user {
+  justify-content: flex-end;
+}
+
+.chatMessageBubble {
+  max-width: 75%;
+  padding: 0.85rem 1.1rem;
+  border-radius: 1.2rem;
+  font-size: 1.01rem;
+  box-shadow: var(--shadow-sm);
+  background: #fff;
+  color: var(--text-primary);
+  position: relative;
+  word-break: break-word;
+  border: 1.5px solid #e0e7ef;
+  transition: background 0.18s, color 0.18s;
+}
+
+.chatMessage.user .chatMessageBubble {
+  background: linear-gradient(90deg, var(--primary-color) 80%, var(--accent-color) 100%);
+  color: #fff;
+  border-bottom-right-radius: 0.4rem;
+  border-bottom-left-radius: 1.2rem;
+  border-top-right-radius: 1.2rem;
+  border-top-left-radius: 1.2rem;
+  border: 1.5px solid var(--primary-color);
+}
+
+.chatMessage:not(.user) .chatMessageBubble {
+  background: #fff;
+  color: var(--text-primary);
+  border-bottom-left-radius: 0.4rem;
+  border-bottom-right-radius: 1.2rem;
+  border-top-right-radius: 1.2rem;
+  border-top-left-radius: 1.2rem;
+  border: 1.5px solid var(--accent-color);
+}
+
+.chatMessageText {
+  margin-bottom: 0.2rem;
+}
+
+.chatMessageTime {
+  font-size: 0.82rem;
+  color: #64748b;
+  text-align: right;
+}
+
+.chatMessageTime.user {
+  color: #a5b4fc;
+}
+
+.chatLoading {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.1rem;
+}
+
+.chatLoadingBubble {
+  background: #e0e7ff;
+  color: var(--primary-color);
+  border-radius: 1.2rem;
+  padding: 0.7rem 1.1rem;
+  font-size: 1.01rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.chatInputContainer {
+  padding: 1.1rem 1.5rem 1.1rem 1.5rem;
+  background: #fff;
+  border-top: 1.5px solid #e0e7ef;
+}
+
+.chatInputWrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.7rem;
+}
+
+.chatTextarea {
+  flex: 1;
+  min-height: 38px;
+  max-height: 120px;
+  border-radius: 10px;
+  border: 1.5px solid var(--primary-color);
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  background: #f1f5f9;
+  color: var(--text-primary);
+  resize: none;
+  transition: border 0.18s;
+}
+
+.chatTextarea:focus {
+  outline: none;
+  border: 1.5px solid var(--accent-color);
+  background: #fff;
+}
+
+.chatSendBtn {
+  background: linear-gradient(90deg, var(--primary-color) 80%, var(--accent-color) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.18s, transform 0.18s;
+}
+
+.chatSendBtn:hover:not(:disabled) {
+  background: linear-gradient(90deg, var(--primary-hover) 80%, var(--purple-accent) 100%);
+  transform: scale(1.04);
+}
+
+.chatSendBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+} 

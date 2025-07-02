@@ -1,0 +1,227 @@
+/* HomePage.module.css */
+
+.homeRoot {
+  background: var(--background);
+  min-height: 100vh;
+  font-family: 'Inter', 'Poppins', 'Rubik', sans-serif;
+}
+
+.heroSection {
+  background: linear-gradient(120deg, var(--background-dark) 0%, var(--primary-color) 60%, var(--background) 100%);
+  color: #fff;
+  padding: 4rem 0 3rem 0;
+  text-align: center;
+  box-shadow: 0 8px 32px 0 rgba(30,58,138,0.10);
+  position: relative;
+  z-index: 1;
+}
+
+.heroSection::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 48px;
+  background: linear-gradient(to bottom, rgba(37,99,235,0.10) 0%, rgba(241,245,249,0.0) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.heroTitle {
+  font-size: 2.7rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  letter-spacing: -1px;
+}
+
+.heroSubtitle {
+  font-size: 1.25rem;
+  color: #e0e7ef;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.heroCtas {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.ctaBtn {
+  background: linear-gradient(90deg, var(--primary-color) 80%, var(--accent-color) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem 2.2rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: background 0.18s, transform 0.18s;
+}
+
+.ctaBtn:hover {
+  background: linear-gradient(90deg, var(--primary-hover) 80%, var(--purple-accent) 100%);
+  transform: scale(1.04);
+}
+
+.featuresSection {
+  background: #fff;
+  padding: 3rem 0 2.5rem 0;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.featureCard {
+  background: var(--secondary-color);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid #e0e7ef;
+  padding: 2rem 1.2rem 1.5rem 1.2rem;
+  text-align: center;
+  transition: box-shadow 0.18s;
+}
+
+.featureCard:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.featureIcon {
+  background: linear-gradient(135deg, var(--primary-color) 60%, var(--accent-color) 100%);
+  color: #fff;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+}
+
+.featureTitle {
+  color: var(--background-dark);
+  font-size: 1.18rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.featureDesc {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.howItWorksSection {
+  background: var(--background);
+  padding: 3rem 0 2.5rem 0;
+  text-align: center;
+}
+
+.howItWorksTitle {
+  color: var(--background-dark);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+}
+
+.howItWorksSubtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.howItWorksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.howItWorksStep {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid #e0e7ef;
+  padding: 1.5rem 1.2rem;
+  text-align: center;
+}
+
+.howItWorksStepNumber {
+  background: linear-gradient(135deg, var(--primary-color) 60%, var(--accent-color) 100%);
+  color: #fff;
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 auto 1rem auto;
+}
+
+.howItWorksStepTitle {
+  color: var(--background-dark);
+  font-size: 1.08rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.howItWorksStepDesc {
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+}
+
+.ctaSection {
+  background: linear-gradient(120deg, var(--primary-color) 60%, var(--background) 100%);
+  color: #fff;
+  padding: 3rem 0 2.5rem 0;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.ctaSection::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 48px;
+  background: linear-gradient(to bottom, rgba(37,99,235,0.10) 0%, rgba(241,245,249,0.0) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ctaSectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+}
+
+.ctaSectionSubtitle {
+  color: #e0e7ef;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+  .featuresGrid, .howItWorksGrid {
+    grid-template-columns: 1fr;
+  }
+  .heroTitle {
+    font-size: 2rem;
+  }
+} 

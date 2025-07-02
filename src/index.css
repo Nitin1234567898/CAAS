@@ -1,19 +1,23 @@
 :root {
-  --primary-color: #6366f1;
-  --primary-hover: #4f46e5;
-  --secondary-color: #f8fafc;
-  --text-primary: #1e293b;
+  --primary-color: #2563EB;
+  --primary-hover: #1E3A8A;
+  --secondary-color: #F1F5F9;
+  --accent-color: #14B8A6;
+  --purple-accent: #a78bfa;
+  --text-primary: #0F172A;
   --text-secondary: #64748b;
-  --background: #ffffff;
+  --background: #F1F5F9;
+  --background-dark: #1E3A8A;
+  --background-card: #ffffff;
   --border-color: #e2e8f0;
   --success-color: #10b981;
   --error-color: #ef4444;
   --warning-color: #f59e0b;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --border-radius: 8px;
-  --transition: all 0.2s ease-in-out;
+  --shadow-sm: 0 1px 2px 0 rgb(30 58 138 / 0.05);
+  --shadow-md: 0 4px 12px -1px rgb(30 58 138 / 0.10), 0 2px 8px -2px rgb(20 184 166 / 0.08);
+  --shadow-lg: 0 10px 24px -3px rgb(30 58 138 / 0.12), 0 4px 12px -4px rgb(167 139 250 / 0.10);
+  --border-radius: 12px;
+  --transition: all 0.2s cubic-bezier(.4,0,.2,1);
 }
 
 @keyframes spin {
@@ -32,14 +36,14 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', 'Poppins', 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 code {

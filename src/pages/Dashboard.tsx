@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { supabase, Chatbot } from '../lib/supabase';
 import ChatInterface from '../components/ChatInterface';
+import styles from './Dashboard.module.css';
 
 const Dashboard: React.FC = () => {
   const { user } = useUser();
@@ -144,254 +145,125 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user?.firstName || 'User'}!
-          </h1>
-          <p className="text-gray-600">
-            Manage your chatbots and monitor their performance
-          </p>
+    <div className={styles.dashboardRoot}>
+      <div className="container">
+        <div className={styles.dashboardHeader}>
+          <h1 className={styles.dashboardTitle}>Welcome back, {user?.firstName || 'User'}!</h1>
+          <p className={styles.dashboardSubtitle}>Manage your chatbots and monitor their performance</p>
         </div>
-
-        {/* Stats Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="card">
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-primary-color rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Chatbots</p>
-                <p className="text-2xl font-bold text-gray-900">{chatbots.length}</p>
-              </div>
+        <div className={styles.statsGrid}>
+          <div className={styles.statsCard}>
+            <div className={styles.statsIcon}>
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <div>
+              <p className={styles.statsLabel}>Total Chatbots</p>
+              <p className={styles.statsValue}>{chatbots.length}</p>
             </div>
           </div>
 
-          <div className="card">
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-success-color rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Bots</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {chatbots.filter(bot => bot.status === 'active').length}
-                </p>
-              </div>
+          <div className={styles.statsCard}>
+            <div className={styles.statsIcon}>
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className={styles.statsLabel}>Active Bots</p>
+              <p className={styles.statsValue}>
+                {chatbots.filter(bot => bot.status === 'active').length}
+              </p>
             </div>
           </div>
 
-          <div className="card">
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-warning-color rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Messages</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {chatbots.reduce((sum, bot) => sum + bot.message_count, 0)}
-                </p>
-              </div>
+          <div className={styles.statsCard}>
+            <div className={styles.statsIcon}>
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <div>
+              <p className={styles.statsLabel}>Total Messages</p>
+              <p className={styles.statsValue}>
+                {chatbots.reduce((sum, bot) => sum + bot.message_count, 0)}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Chatbots List */}
-        <div className="card">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Your Chatbots</h2>
-            <button
-              onClick={(e) => {
-                setShowCreateModal(true);
-                // Ripple effect
-                const btn = e.currentTarget;
-                const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-                if (ripple) {
-                  ripple.classList.remove('show');
-                  void ripple.offsetWidth;
-                  ripple.classList.add('show');
-                  const rect = btn.getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const y = e.clientY - rect.top;
-                  ripple.style.left = `${x}px`;
-                  ripple.style.top = `${y}px`;
-                }
-              }}
-              className="fancy-btn"
-            >
-              + New Chatbot
-              <span className="ripple-effect"></span>
-            </button>
-          </div>
-
-          {chatbots.length === 0 ? (
-            <div className="text-center py-8">
-              <h3 className="text-lg font-medium text-gray-900">No chatbots</h3>
-              <p className="mt-1 text-sm text-gray-500">Get started by creating your first chatbot.</p>
-              <div className="mt-4">
-                <button
-                  onClick={() => setShowCreateModal(true)}
-                  className="btn"
-                >
-                  Create Chatbot
-                </button>
+        <div className={styles.card}>
+          <div className={styles.cardTitle}>Your Chatbots</div>
+          <div className={styles.chatbotList}>
+            {chatbots.length === 0 ? (
+              <div className={styles.emptyChatbotCard}>
+                <h3 className={styles.emptyChatbotTitle}>No chatbots</h3>
+                <p className={styles.emptyChatbotSubtitle}>Get started by creating your first chatbot.</p>
+                <div className={styles.emptyChatbotButton}>
+                  <button
+                    onClick={() => setShowCreateModal(true)}
+                    className={styles.emptyChatbotButton}
+                  >
+                    Create Chatbot
+                  </button>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {chatbots.map((chatbot) => (
-                <div key={chatbot.id} className="border border-gray-200 rounded-lg p-6">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">{chatbot.name}</h3>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          chatbot.status === 'active' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-gray-100 text-gray-800'
-                        }`}>
-                          {chatbot.status}
-                        </span>
-                      </div>
-                      <p className="text-gray-600 mb-4">{chatbot.description}</p>
-                      
-                      <div className="flex items-center gap-6 text-sm text-gray-500">
-                        <span>Created: {new Date(chatbot.created_at).toLocaleDateString()}</span>
-                        <span>Messages: {chatbot.message_count.toLocaleString()}</span>
-                      </div>
-
-                      <div className="mt-4">
-                        <label className="text-sm font-medium text-gray-700 mb-2 block">
-                          API Key
-                        </label>
-                        <div className="flex items-center gap-2">
-                          <input 
-                            type="text" 
-                            value={chatbot.api_key} 
-                            readOnly 
-                            className="input bg-gray-50 text-sm"
-                          />
-                          <button 
-                            onClick={(e) => {
-                              copyApiKey(chatbot.api_key);
-                              // Ripple effect
-                              const btn = e.currentTarget;
-                              const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-                              if (ripple) {
-                                ripple.classList.remove('show');
-                                void ripple.offsetWidth;
-                                ripple.classList.add('show');
-                                const rect = btn.getBoundingClientRect();
-                                const x = e.clientX - rect.left;
-                                const y = e.clientY - rect.top;
-                                ripple.style.left = `${x}px`;
-                                ripple.style.top = `${y}px`;
-                              }
-                            }}
-                            className="fancy-btn-small fancy-btn-secondary"
-                          >
-                            Copy
-                            <span className="ripple-effect"></span>
-                          </button>
-                          <button 
-                            onClick={(e) => {
-                              openIntegrationModal(chatbot);
-                              // Ripple effect
-                              const btn = e.currentTarget;
-                              const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-                              if (ripple) {
-                                ripple.classList.remove('show');
-                                void ripple.offsetWidth;
-                                ripple.classList.add('show');
-                                const rect = btn.getBoundingClientRect();
-                                const x = e.clientX - rect.left;
-                                const y = e.clientY - rect.top;
-                                ripple.style.left = `${x}px`;
-                                ripple.style.top = `${y}px`;
-                              }
-                            }}
-                            className="fancy-btn-small fancy-btn-secondary"
-                          >
-                            Integration Guide
-                            <span className="ripple-effect"></span>
-                          </button>
-                        </div>
-                      </div>
+            ) : (
+              chatbots.map((chatbot) => (
+                <div key={chatbot.id} className={styles.chatbotCard}>
+                  <div>
+                    <div className={styles.chatbotName}>{chatbot.name}</div>
+                    <span className={chatbot.status === 'active' ? styles.chatbotStatus : styles.chatbotStatus + ' ' + styles.inactive}>{chatbot.status}</span>
+                    <p className={styles.chatbotDesc}>{chatbot.description}</p>
+                    <label className={styles.apiKeyLabel}>API Key</label>
+                    <div className={styles.apiKeyInputRow}>
+                      <input type="text" value={chatbot.api_key} readOnly className={styles.apiKeyInput} />
+                      <button
+                        onClick={(e) => {
+                          copyApiKey(chatbot.api_key);
+                        }}
+                        className={styles.secondaryBtn}
+                      >
+                        Copy
+                      </button>
                     </div>
-
-                    <div className="flex flex-col gap-2">
+                    <div className={styles.buttonRow}>
                       <button
                         onClick={(e) => {
                           toggleChatbotStatus(chatbot.id, chatbot.status);
-                          // Ripple effect
-                          const btn = e.currentTarget;
-                          const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-                          if (ripple) {
-                            ripple.classList.remove('show');
-                            void ripple.offsetWidth;
-                            ripple.classList.add('show');
-                            const rect = btn.getBoundingClientRect();
-                            const x = e.clientX - rect.left;
-                            const y = e.clientY - rect.top;
-                            ripple.style.left = `${x}px`;
-                            ripple.style.top = `${y}px`;
-                          }
                         }}
-                        className={chatbot.status === 'active' ? 'fancy-btn-small fancy-btn-secondary' : 'fancy-btn-small'}
+                        className={styles.secondaryBtn}
                       >
                         {chatbot.status === 'active' ? 'Deactivate' : 'Activate'}
-                        <span className="ripple-effect"></span>
                       </button>
                       <button
                         onClick={(e) => {
                           openChatModal(chatbot);
-                          // Ripple effect
-                          const btn = e.currentTarget;
-                          const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-                          if (ripple) {
-                            ripple.classList.remove('show');
-                            void ripple.offsetWidth;
-                            ripple.classList.add('show');
-                            const rect = btn.getBoundingClientRect();
-                            const x = e.clientX - rect.left;
-                            const y = e.clientY - rect.top;
-                            ripple.style.left = `${x}px`;
-                            ripple.style.top = `${y}px`;
-                          }
                         }}
-                        className="fancy-btn-small fancy-btn-secondary"
+                        className={styles.secondaryBtn}
                       >
                         Test Chat
-                        <span className="ripple-effect"></span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditKBChatbot(chatbot);
-                          setEditKBValue(chatbot.knowledge_base || '');
-                          setEditKBError('');
-                          setShowEditKBModal(true);
-                        }}
-                        className="fancy-btn-small fancy-btn-secondary"
-                        style={{minWidth: 0}}
-                      >
-                        Edit Knowledge Base
-                        <span className="ripple-effect"></span>
                       </button>
                     </div>
                   </div>
+                  <div className={styles.buttonRow}>
+                    <button
+                      onClick={(e) => {
+                        setEditKBChatbot(chatbot);
+                        setEditKBValue(chatbot.knowledge_base || '');
+                        setEditKBError('');
+                        setShowEditKBModal(true);
+                      }}
+                      className={styles.secondaryBtn}
+                    >
+                      Edit Knowledge Base
+                    </button>
+                  </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
 
         {/* Create Chatbot Modal */}
@@ -462,46 +334,18 @@ const Dashboard: React.FC = () => {
                 <button
                   onClick={(e) => {
                     setShowCreateModal(false);
-                    // Ripple effect
-                    const btn = e.currentTarget;
-                    const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-                    if (ripple) {
-                      ripple.classList.remove('show');
-                      void ripple.offsetWidth;
-                      ripple.classList.add('show');
-                      const rect = btn.getBoundingClientRect();
-                      const x = e.clientX - rect.left;
-                      const y = e.clientY - rect.top;
-                      ripple.style.left = `${x}px`;
-                      ripple.style.top = `${y}px`;
-                    }
                   }}
-                  className="fancy-btn flex-1"
+                  className={styles.fancyBtn}
                 >
                   Cancel
-                  <span className="ripple-effect"></span>
                 </button>
                 <button
                   onClick={(e) => {
                     handleCreateChatbot();
-                    // Ripple effect
-                    const btn = e.currentTarget;
-                    const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-                    if (ripple) {
-                      ripple.classList.remove('show');
-                      void ripple.offsetWidth;
-                      ripple.classList.add('show');
-                      const rect = btn.getBoundingClientRect();
-                      const x = e.clientX - rect.left;
-                      const y = e.clientY - rect.top;
-                      ripple.style.left = `${x}px`;
-                      ripple.style.top = `${y}px`;
-                    }
                   }}
-                  className="fancy-btn flex-1"
+                  className={styles.fancyBtn}
                 >
                   Create
-                  <span className="ripple-effect"></span>
                 </button>
               </div>
             </div>
@@ -715,7 +559,7 @@ X-Api-Key: ${selectedChatbot.api_key}`}
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowEditKBModal(false)}
-                  className="btn btn-secondary"
+                  className={styles.btn}
                   disabled={editKBLoading}
                 >
                   Cancel
@@ -738,7 +582,7 @@ X-Api-Key: ${selectedChatbot.api_key}`}
                       setEditKBLoading(false);
                     }
                   }}
-                  className="fancy-btn"
+                  className={styles.fancyBtn}
                   disabled={editKBLoading}
                 >
                   {editKBLoading ? 'Saving...' : 'Save'}
