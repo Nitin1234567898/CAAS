@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { supabase, Chatbot } from '../lib/supabase';
 import ChatInterface from '../components/ChatInterface';
@@ -17,8 +17,15 @@ const Dashboard: React.FC = () => {
     personality: 'professional',
     knowledgeBase: ''
   });
+  const [showEditKBModal, setShowEditKBModal] = useState(false);
+  const [editKBValue, setEditKBValue] = useState('');
+  const [editKBLoading, setEditKBLoading] = useState(false);
+  const [editKBError, setEditKBError] = useState('');
+  const [editKBChatbot, setEditKBChatbot] = useState<Chatbot | null>(null);
 
   const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
+
+  const editKBModalRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch chatbots from Supabase
   const fetchChatbots = useCallback(async () => {
@@ -45,6 +52,12 @@ const Dashboard: React.FC = () => {
       fetchChatbots();
     }
   }, [user, fetchChatbots]);
+
+  useEffect(() => {
+    if (showEditKBModal && editKBModalRef.current) {
+      editKBModalRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [showEditKBModal]);
 
   const handleCreateChatbot = async () => {
     if (!user) return;
@@ -360,6 +373,19 @@ const Dashboard: React.FC = () => {
                         Test Chat
                         <span className="ripple-effect"></span>
                       </button>
+                      <button
+                        onClick={() => {
+                          setEditKBChatbot(chatbot);
+                          setEditKBValue(chatbot.knowledge_base || '');
+                          setEditKBError('');
+                          setShowEditKBModal(true);
+                        }}
+                        className="fancy-btn-small fancy-btn-secondary"
+                        style={{minWidth: 0}}
+                      >
+                        Edit Knowledge Base
+                        <span className="ripple-effect"></span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -668,6 +694,55 @@ X-Api-Key: ${selectedChatbot.api_key}`}
                     <li>• Test the integration thoroughly before going live</li>
                   </ul>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showEditKBModal && editKBChatbot && (
+          <div ref={editKBModalRef} className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+              <h2 className="text-xl font-semibold mb-4">Edit Knowledge Base</h2>
+              <textarea
+                className="input w-full mb-4"
+                rows={8}
+                value={editKBValue}
+                onChange={e => setEditKBValue(e.target.value)}
+                placeholder="Enter knowledge base content..."
+                disabled={editKBLoading}
+              />
+              {editKBError && <div className="text-red-500 text-sm mb-2">{editKBError}</div>}
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setShowEditKBModal(false)}
+                  className="btn btn-secondary"
+                  disabled={editKBLoading}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={async () => {
+                    setEditKBLoading(true);
+                    setEditKBError('');
+                    try {
+                      const { error } = await supabase
+                        .from('chatbots')
+                        .update({ knowledge_base: editKBValue })
+                        .eq('id', editKBChatbot.id);
+                      if (error) throw error;
+                      setChatbots(chatbots.map(bot => bot.id === editKBChatbot.id ? { ...bot, knowledge_base: editKBValue } : bot));
+                      setShowEditKBModal(false);
+                    } catch (err: any) {
+                      setEditKBError('Failed to update knowledge base.');
+                    } finally {
+                      setEditKBLoading(false);
+                    }
+                  }}
+                  className="fancy-btn"
+                  disabled={editKBLoading}
+                >
+                  {editKBLoading ? 'Saving...' : 'Save'}
+                </button>
               </div>
             </div>
           </div>
