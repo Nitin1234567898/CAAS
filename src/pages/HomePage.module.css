@@ -75,6 +75,11 @@
 .featuresSection {
   background: #fff;
   padding: 3rem 0 2.5rem 0;
+  text-align: center;
+}
+
+.featuresTitle, .featuresSubtitle {
+  text-align: center;
 }
 
 .featuresGrid {
