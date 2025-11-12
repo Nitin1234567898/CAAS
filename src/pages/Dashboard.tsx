@@ -27,6 +27,7 @@ const Dashboard: React.FC = () => {
   const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 
   const editKBModalRef = useRef<HTMLDivElement | null>(null);
+  const createSectionRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch chatbots from Supabase
   const fetchChatbots = useCallback(async () => {
@@ -108,6 +109,30 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const deleteChatbot = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('chatbots')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setChatbots(prev => prev.filter(bot => bot.id !== id));
+
+      if (selectedChatbot?.id === id) {
+        closeChatModal();
+      }
+
+      if (editKBChatbot?.id === id) {
+        setShowEditKBModal(false);
+        setEditKBChatbot(null);
+      }
+    } catch (error) {
+      console.error('Error deleting chatbot:', error);
+    }
+  };
+
   const copyApiKey = (apiKey: string) => {
     navigator.clipboard.writeText(apiKey);
     // You could add a toast notification here
@@ -133,6 +158,15 @@ const Dashboard: React.FC = () => {
     setSelectedChatbot(null);
   };
 
+  const handleOpenCreateModal = () => {
+    if (chatbots.length > 0 && createSectionRef.current) {
+      createSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => setShowCreateModal(true), 350);
+    } else {
+      setShowCreateModal(true);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -148,8 +182,18 @@ const Dashboard: React.FC = () => {
     <div className={styles.dashboardRoot}>
       <div className="container">
         <div className={styles.dashboardHeader}>
-          <h1 className={styles.dashboardTitle}>Welcome back, {user?.firstName || 'User'}!</h1>
-          <p className={styles.dashboardSubtitle}>Manage your chatbots and monitor their performance</p>
+          <div className={styles.dashboardHeaderText}>
+            <h1 className={styles.dashboardTitle}>Welcome back, {user?.firstName || 'User'}!</h1>
+            <p className={styles.dashboardSubtitle}>Manage your chatbots and monitor their performance</p>
+          </div>
+          <div className={styles.dashboardHeaderActions}>
+            <button
+              onClick={handleOpenCreateModal}
+              className={styles.createBtn}
+            >
+              Create Chatbot
+            </button>
+          </div>
         </div>
         <div className={styles.statsGrid}>
           <div className={styles.statsCard}>
@@ -194,20 +238,26 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className={styles.card}>
-          <div className={styles.cardTitle}>Your Chatbots</div>
+          <div className={styles.cardHeader}>
+            <div className={styles.cardTitle}>Your Chatbots</div>
+            <button
+              onClick={handleOpenCreateModal}
+              className={styles.createBtnSmall}
+            >
+              Create Chatbot
+            </button>
+          </div>
           <div className={styles.chatbotList}>
             {chatbots.length === 0 ? (
               <div className={styles.emptyChatbotCard}>
                 <h3 className={styles.emptyChatbotTitle}>No chatbots</h3>
                 <p className={styles.emptyChatbotSubtitle}>Get started by creating your first chatbot.</p>
-                <div className={styles.emptyChatbotButton}>
-                  <button
-                    onClick={() => setShowCreateModal(true)}
-                    className={styles.emptyChatbotButton}
-                  >
-                    Create Chatbot
-                  </button>
-                </div>
+                <button
+                  onClick={handleOpenCreateModal}
+                  className={styles.createBtn}
+                >
+                  Create Your First Chatbot
+                </button>
               </div>
             ) : (
               chatbots.map((chatbot) => (
@@ -265,6 +315,16 @@ const Dashboard: React.FC = () => {
                     >
                       Integration Guide
                     </button>
+                    <button
+                      onClick={() => {
+                        if (window.confirm(`Are you sure you want to delete ${chatbot.name}? This action cannot be undone.`)) {
+                          deleteChatbot(chatbot.id);
+                        }
+                      }}
+                      className={styles.dangerBtn}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               ))
@@ -272,6 +332,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
+        <div ref={createSectionRef} className={styles.createSectionAnchor} />
         {/* Create Chatbot Modal */}
         {showCreateModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -341,7 +402,7 @@ const Dashboard: React.FC = () => {
                   onClick={(e) => {
                     setShowCreateModal(false);
                   }}
-                  className={styles.fancyBtn}
+                  className={styles.modalCancelBtn}
                 >
                   Cancel
                 </button>
@@ -349,7 +410,7 @@ const Dashboard: React.FC = () => {
                   onClick={(e) => {
                     handleCreateChatbot();
                   }}
-                  className={styles.fancyBtn}
+                  className={styles.modalCreateBtn}
                 >
                   Create
                 </button>
