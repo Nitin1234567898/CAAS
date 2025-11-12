@@ -259,6 +259,12 @@ const Dashboard: React.FC = () => {
                     >
                       Edit Knowledge Base
                     </button>
+                    <button
+                      onClick={() => openIntegrationModal(chatbot)}
+                      className={styles.secondaryBtn}
+                    >
+                      Integration Guide
+                    </button>
                   </div>
                 </div>
               ))

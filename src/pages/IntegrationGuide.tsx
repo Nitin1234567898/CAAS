@@ -3,16 +3,6 @@ import styles from './IntegrationGuide.module.css';
 
 const IntegrationGuide: React.FC = () => {
   const [activeTab, setActiveTab] = useState<null | 'html' | 'react'>(null);
-  const [showHtmlCode, setShowHtmlCode] = useState(false);
-  const [showReactCode, setShowReactCode] = useState(false);
-
-  const handleBtnMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const btn = e.currentTarget;
-    const rect = btn.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    btn.style.setProperty('--x', `${x}%`);
-  };
-
   return (
     <div className={styles.guideRoot}>
       <div className={styles.guideContainer}>
