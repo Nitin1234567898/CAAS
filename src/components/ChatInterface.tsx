@@ -23,6 +23,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatbotInitial = chatbotName.trim().charAt(0).toUpperCase() || 'A';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -95,40 +96,42 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
       <div className={styles.chatModal}>
         <div className={styles.chatHeader}>
           <div className={styles.chatHeaderContent}>
-            <div className={styles.chatIcon}>
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
+            <div className={styles.chatAvatar} title={chatbotName} aria-hidden="true">
+              <span>{chatbotInitial}</span>
             </div>
             <div>
               <h3 className={styles.chatTitle}>{chatbotName}</h3>
               <p className={styles.chatSubtitle}>AI Chatbot</p>
             </div>
           </div>
-          <button
-            onClick={(e) => {
-              onClose();
-              // Ripple effect
-              const btn = e.currentTarget;
-              const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-              if (ripple) {
-                ripple.classList.remove('show');
-                void ripple.offsetWidth;
-                ripple.classList.add('show');
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                ripple.style.left = `${x}px`;
-                ripple.style.top = `${y}px`;
-              }
-            }}
-            className={styles.chatCloseBtn}
-          >
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            <span className="ripple-effect"></span>
-          </button>
+          <div className={styles.chatHeaderRight}>
+            <button
+              type="button"
+              aria-label={`Close ${chatbotName} chat`}
+              onClick={(e) => {
+                onClose();
+                // Ripple effect
+                const btn = e.currentTarget;
+                const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
+                if (ripple) {
+                  ripple.classList.remove('show');
+                  void ripple.offsetWidth;
+                  ripple.classList.add('show');
+                  const rect = btn.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const y = e.clientY - rect.top;
+                  ripple.style.left = `${x}px`;
+                  ripple.style.top = `${y}px`;
+                }
+              }}
+              className={styles.chatCloseBtn}
+            >
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <span className="ripple-effect" aria-hidden="true"></span>
+            </button>
+          </div>
         </div>
 
         {/* Messages */}
@@ -186,6 +189,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
               disabled={isLoading}
             />
             <button
+              type="button"
               onClick={(e) => {
                 sendMessage();
                 // Ripple effect
@@ -205,10 +209,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
               className={styles.chatSendBtn}
               disabled={!inputMessage.trim() || isLoading}
             >
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-              <span className="ripple-effect"></span>
+              <span className={styles.chatSendIcon} aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M4 4l7.29 7.29a1 1 0 010 1.42L4 20l16-8L4 4z" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <span className={styles.chatSendLabel}>Send</span>
+              <span className="ripple-effect" aria-hidden="true"></span>
             </button>
           </div>
         </div>
