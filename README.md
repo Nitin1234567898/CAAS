@@ -9,7 +9,7 @@ A modern, full-stack chatbot platform that allows users to create, customize, an
 - **🔌 Easy Integration**: Simple API integration for any website
 - **📊 Analytics Dashboard**: Monitor chatbot performance and usage
 - **🔐 Secure Authentication**: Built with Clerk for secure user management
-- **⚡ Real-time AI**: Powered by Google Gemini AI for intelligent responses
+- **⚡ Real-time AI**: Powered by Groq AI for intelligent responses
 - **🎯 Multiple Integration Methods**: HTML/JavaScript and React component support
 
 ## 🛠️ Tech Stack
@@ -24,7 +24,7 @@ A modern, full-stack chatbot platform that allows users to create, customize, an
 - **Supabase** for database and backend services
 - **PostgreSQL** database
 - **Supabase Edge Functions** for API endpoints
-- **Google Gemini AI** for chatbot responses
+- **Groq AI** for chatbot responses
 
 ## 🚀 Getting Started
 
@@ -33,7 +33,7 @@ A modern, full-stack chatbot platform that allows users to create, customize, an
 - npm or yarn
 - Supabase account
 - Clerk account
-- Google Gemini API key
+- Groq API key
 
 ### Installation
 
@@ -94,7 +94,7 @@ chatbot-service/
    supabase functions deploy chatbot-chat
    ```
 4. Set environment variables in Supabase dashboard:
-   - `GEMINI_API_KEY`: Your Google Gemini API key
+   - `GROQ_API_KEY`: Your Groq API key
 
 ### Clerk Setup
 1. Create a Clerk application
@@ -208,4 +208,4 @@ If you encounter any issues or have questions:
 
 ---
 
-Built with ❤️ using React, Supabase, and Google Gemini AI 
+Built with ❤️ using React, Supabase, and Groq AI
