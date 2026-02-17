@@ -1,9 +1,10 @@
 /* IntegrationGuide.module.css */
 
 .guideRoot {
-  background: var(--background);
+  background: #000000;
   min-height: 100vh;
   font-family: 'Inter', 'Poppins', 'Rubik', sans-serif;
+  color: #ffffff;
 }
 
 .guideContainer {
@@ -21,16 +22,16 @@
 
 .guideSidebar {
   width: 270px;
-  background: #fff;
+  background: #000000;
   border-radius: 14px;
-  box-shadow: var(--shadow-md);
-  border: 1.5px solid #e0e7ef;
+  box-shadow: none;
+  border: 1px solid #000000;
   padding: 2rem 1.2rem 1.5rem 1.2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   font-size: 1rem;
-  color: var(--background-dark);
+  color: #ffffff;
 }
 
 .guideHeader {
@@ -38,28 +39,28 @@
 }
 
 .guideTitle {
-  color: var(--background-dark);
+  color: #ffffff;
   font-size: 2.2rem;
   font-weight: 800;
   margin-bottom: 0.5rem;
 }
 
 .guideDesc {
-  color: var(--text-secondary);
+  color: #ffffff;
   font-size: 1.15rem;
 }
 
 .guideCard {
-  background: var(--secondary-color);
+  background: #000000;
   border-radius: 14px;
-  box-shadow: var(--shadow-sm);
-  border: 1.5px solid #e0e7ef;
+  box-shadow: none;
+  border: 1px solid #000000;
   padding: 2rem 1.2rem 1.5rem 1.2rem;
   margin-bottom: 2rem;
 }
 
 .guideSectionTitle {
-  color: var(--background-dark);
+  color: #ffffff;
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 1.1rem;
@@ -72,27 +73,28 @@
 }
 
 .guideTabBtn {
-  background: #fff;
-  color: var(--primary-color);
-  border: 1.5px solid var(--primary-color);
-  border-radius: 10px 10px 0 0;
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 10px;
   padding: 0.7rem 1.5rem;
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: background 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: none;
+  transition: none;
 }
 
-.guideTabBtn.active, .guideTabBtn:hover {
-  background: linear-gradient(90deg, var(--primary-color) 80%, var(--accent-color) 100%);
-  color: #fff;
-  transform: scale(1.04);
+.guideTabBtn.active,
+.guideTabBtn:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: none;
 }
 
 .guideCodeBlock {
-  background: #0f172a;
-  color: #e0e7ef;
+  background: #000000;
+  color: #ffffff;
   border-radius: 10px;
   font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
   font-size: 1.01rem;
@@ -100,13 +102,13 @@
   margin-top: 1rem;
   margin-bottom: 1.2rem;
   overflow-x: auto;
-  box-shadow: var(--shadow-sm);
-  border: 1.5px solid #1e3a8a;
+  box-shadow: none;
+  border: 1px solid #000000;
 }
 
 .guideStepList {
   margin: 0.7rem 0 0 1.2rem;
-  color: var(--text-secondary);
+  color: #ffffff;
   font-size: 1rem;
 }
 
@@ -114,43 +116,132 @@
   display: flex;
   gap: 1.2rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .guideChoiceBtn {
-  background: linear-gradient(90deg, var(--primary-color) 80%, var(--accent-color) 100%);
-  color: #fff;
-  border: none;
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
   border-radius: 10px;
   padding: 0.8rem 1.7rem;
   font-size: 1.08rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: background 0.18s, transform 0.18s;
+  box-shadow: none;
+  transition: none;
   position: relative;
   overflow: hidden;
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
-.guideChoiceBtn.active, .guideChoiceBtn:hover {
-  background: linear-gradient(90deg, var(--primary-hover) 80%, var(--purple-accent) 100%);
-  color: #fff;
-  transform: scale(1.04);
+.guideChoiceBtn.active,
+.guideChoiceBtn:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: none;
 }
 
 .guideChoiceBtn .sparkleEffect {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  opacity: 0.18;
-  background: radial-gradient(circle at 60% 40%, var(--purple-accent) 0%, transparent 70%);
-  z-index: 0;
+  display: none;
 }
 
 .guideBtnDesc {
   font-size: 0.98rem;
-  color: #e0e7ef;
+  color: #ffffff;
   font-weight: 400;
   margin-top: 0.3rem;
+}
+
+.guideApiDocs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.guideApiTitle {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.guideApiCode {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+  font-size: 0.95rem;
+  display: block;
+}
+
+.guideApiPre {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 6px;
+  padding: 1rem;
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.guideSidebarTitle {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.guideTipsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: #ffffff;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.guideTipsList li {
+  margin-bottom: 0.7rem;
+}
+
+.guideTipsList code {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+  font-size: 0.9rem;
+}
+
+.guideTroubleshootingList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.guideTroubleshootingTitle {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.guideTroubleshootingDesc {
+  color: #ffffff;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
 }
 
 @media (max-width: 1100px) {
@@ -158,8 +249,9 @@
     flex-direction: column;
     gap: 1.5rem;
   }
+
   .guideSidebar {
     width: 100%;
     margin-bottom: 2rem;
   }
-} 
+}

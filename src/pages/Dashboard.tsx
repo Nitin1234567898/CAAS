@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
   // Fetch chatbots from Supabase
   const fetchChatbots = useCallback(async () => {
     if (!user) return;
-    
+
     try {
       const { data, error } = await supabase
         .from('chatbots')
@@ -101,7 +101,7 @@ const Dashboard: React.FC = () => {
 
       if (error) throw error;
 
-      setChatbots(chatbots.map(bot => 
+      setChatbots(chatbots.map(bot =>
         bot.id === id ? { ...bot, status: newStatus as 'active' | 'inactive' } : bot
       ));
     } catch (error) {
@@ -169,10 +169,10 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#000' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-color mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your chatbots...</p>
+          <div className="animate-spin rounded-full h-12 w-12 mx-auto" style={{ borderBottom: '2px solid #000000ff' }}></div>
+          <p className="mt-4" style={{ color: '#fff' }}>Loading your chatbots...</p>
         </div>
       </div>
     );
@@ -198,7 +198,7 @@ const Dashboard: React.FC = () => {
         <div className={styles.statsGrid}>
           <div className={styles.statsCard}>
             <div className={styles.statsIcon}>
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" style={{ color: '#000' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
@@ -210,7 +210,7 @@ const Dashboard: React.FC = () => {
 
           <div className={styles.statsCard}>
             <div className={styles.statsIcon}>
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" style={{ color: '#000' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -224,7 +224,7 @@ const Dashboard: React.FC = () => {
 
           <div className={styles.statsCard}>
             <div className={styles.statsIcon}>
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" style={{ color: '#000' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
@@ -335,20 +335,21 @@ const Dashboard: React.FC = () => {
         <div ref={createSectionRef} className={styles.createSectionAnchor} />
         {/* Create Chatbot Modal */}
         {showCreateModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-              <h2 className="text-xl font-semibold mb-4">Create New Chatbot</h2>
-              
+          <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.85)' }}>
+            <div className="rounded-lg p-6 w-full max-w-md" style={{ background: '#000', border: '1px solid #000000ff' }}>
+              <h2 className="text-xl font-semibold mb-4" style={{ color: '#fff' }}>Create New Chatbot</h2>
+
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium mb-1" style={{ color: '#fff' }}>
                     Chatbot Name
                   </label>
                   <input
                     type="text"
                     value={newChatbot.name}
-                    onChange={(e) => setNewChatbot({...newChatbot, name: e.target.value})}
+                    onChange={(e) => setNewChatbot({ ...newChatbot, name: e.target.value })}
                     className="input w-full"
+                    style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
                     placeholder="e.g., Customer Support Bot"
                   />
                 </div>
@@ -359,8 +360,9 @@ const Dashboard: React.FC = () => {
                   </label>
                   <textarea
                     value={newChatbot.description}
-                    onChange={(e) => setNewChatbot({...newChatbot, description: e.target.value})}
+                    onChange={(e) => setNewChatbot({ ...newChatbot, description: e.target.value })}
                     className="input w-full"
+                    style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
                     rows={3}
                     placeholder="What does this chatbot do?"
                   />
@@ -372,8 +374,9 @@ const Dashboard: React.FC = () => {
                   </label>
                   <select
                     value={newChatbot.personality}
-                    onChange={(e) => setNewChatbot({...newChatbot, personality: e.target.value})}
+                    onChange={(e) => setNewChatbot({ ...newChatbot, personality: e.target.value })}
                     className="input w-full"
+                    style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
                   >
                     <option value="professional">Professional</option>
                     <option value="friendly">Friendly</option>
@@ -389,8 +392,9 @@ const Dashboard: React.FC = () => {
                   </label>
                   <textarea
                     value={newChatbot.knowledgeBase}
-                    onChange={(e) => setNewChatbot({...newChatbot, knowledgeBase: e.target.value})}
+                    onChange={(e) => setNewChatbot({ ...newChatbot, knowledgeBase: e.target.value })}
                     className="input w-full"
+                    style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
                     rows={4}
                     placeholder="Specific information, FAQs, or context for the chatbot..."
                   />
@@ -431,41 +435,41 @@ const Dashboard: React.FC = () => {
 
         {/* Integration Guide Modal */}
         {showIntegrationModal && selectedChatbot && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.85)' }}>
+            <div className="rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto" style={{ background: '#000', border: '1px solid #fff' }}>
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Integration Guide for {selectedChatbot.name}</h2>
-                <button onClick={closeIntegrationModal} className="text-gray-500 hover:text-gray-700">
+                <h2 className="text-xl font-semibold" style={{ color: '#fff' }}>Integration Guide for {selectedChatbot.name}</h2>
+                <button onClick={closeIntegrationModal} style={{ color: '#fff' }}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-              
+
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Your Integration Details</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                  <h3 className="text-lg font-medium mb-2" style={{ color: '#fff' }}>Your Integration Details</h3>
+                  <div className="p-4 rounded-lg space-y-2" style={{ background: '#000', border: '1px solid #060606ff' }}>
                     <div>
-                      <span className="font-medium">API Key:</span> 
-                      <code className="ml-2 bg-white px-2 py-1 rounded text-sm">{selectedChatbot.api_key}</code>
+                      <span className="font-medium" style={{ color: '#fff' }}>API Key:</span>
+                      <code className="ml-2 px-2 py-1 rounded text-sm" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>{selectedChatbot.api_key}</code>
                     </div>
                     <div>
-                      <span className="font-medium">Chatbot ID:</span> 
-                      <code className="ml-2 bg-white px-2 py-1 rounded text-sm">{selectedChatbot.id}</code>
+                      <span className="font-medium" style={{ color: '#fff' }}>Chatbot ID:</span>
+                      <code className="ml-2 px-2 py-1 rounded text-sm" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>{selectedChatbot.id}</code>
                     </div>
                     <div>
-                      <span className="font-medium">Supabase URL:</span> 
-                      <code className="ml-2 bg-white px-2 py-1 rounded text-sm">{supabaseUrl}</code>
+                      <span className="font-medium" style={{ color: '#fff' }}>Supabase URL:</span>
+                      <code className="ml-2 px-2 py-1 rounded text-sm" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>{supabaseUrl}</code>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Quick Integration (HTML/JavaScript)</h3>
-                  <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
+                  <h3 className="text-lg font-medium mb-2" style={{ color: '#fff' }}>Quick Integration (HTML/JavaScript)</h3>
+                  <div className="p-4 rounded-lg overflow-x-auto" style={{ background: '#000', color: '#fff', border: '1px solid #080808ff' }}>
                     <pre className="text-sm">
-{`<!-- Add this to your website -->
+                      {`<!-- Add this to your website -->
 <div id="chatbot-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
   <button id="chatbot-toggle" style="width: 60px; height: 60px; border-radius: 50%; background: #007bff; color: white; border: none; cursor: pointer; font-size: 24px;">💬</button>
   
@@ -476,7 +480,7 @@ const Dashboard: React.FC = () => {
     </div>
     <div style="padding: 16px; border-top: 1px solid #eee;">
       <input type="text" id="message-input" placeholder="Type your message..." style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; outline: none;">
-      <button onclick="sendMessage()" style="margin-top: 8px; padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 20px; cursor: pointer;">Send</button>
+      <button onclick="sendMessage()" style="margin-top: 8px; padding: 8px 16px; background: #000000ff; color: white; border: none; border-radius: 20px; cursor: pointer;">Send</button>
     </div>
   </div>
 </div>
@@ -567,26 +571,26 @@ function addMessage(text, sender) {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">API Endpoint</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-600 mb-2">
+                  <h3 className="text-lg font-medium mb-2" style={{ color: '#fff' }}>API Endpoint</h3>
+                  <div className="p-4 rounded-lg" style={{ background: '#000', border: '1px solid #050505ff' }}>
+                    <p className="text-sm mb-2" style={{ color: '#fff' }}>
                       <strong>URL:</strong> <code>{supabaseUrl}/functions/v1/chatbot-chat</code>
                     </p>
-                    <p className="text-sm text-gray-600 mb-2">
+                    <p className="text-sm mb-2" style={{ color: '#fff' }}>
                       <strong>Method:</strong> POST
                     </p>
-                    <p className="text-sm text-gray-600 mb-2">
+                    <p className="text-sm mb-2" style={{ color: '#fff' }}>
                       <strong>Headers:</strong>
                     </p>
-                    <pre className="text-sm bg-white p-2 rounded">
-{`Content-Type: application/json
+                    <pre className="text-sm p-2 rounded" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>
+                      {`Content-Type: application/json
 X-Api-Key: ${selectedChatbot.api_key}`}
                     </pre>
-                    <p className="text-sm text-gray-600 mt-2">
+                    <p className="text-sm mt-2" style={{ color: '#fff' }}>
                       <strong>Request Body:</strong>
                     </p>
-                    <pre className="text-sm bg-white p-2 rounded">
-{`{
+                    <pre className="text-sm p-2 rounded" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>
+                      {`{
   "chatbotId": "${selectedChatbot.id}",
   "message": "User's message here",
   "userId": "unique-user-identifier"
@@ -595,9 +599,9 @@ X-Api-Key: ${selectedChatbot.api_key}`}
                   </div>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h4 className="font-medium text-blue-900 mb-2">💡 Pro Tips</h4>
-                  <ul className="text-sm text-blue-800 space-y-1">
+                <div className="rounded-lg p-4" style={{ background: '#000', border: '1px solid #000000ff' }}>
+                  <h4 className="font-medium mb-2" style={{ color: '#fff' }}>💡 Pro Tips</h4>
+                  <ul className="text-sm space-y-1" style={{ color: '#fff' }}>
                     <li>• Replace <code>your-project-ref</code> with your actual Supabase project reference</li>
                     <li>• Customize the styling to match your website's design</li>
                     <li>• Add error handling for better user experience</li>
@@ -611,18 +615,19 @@ X-Api-Key: ${selectedChatbot.api_key}`}
         )}
 
         {showEditKBModal && editKBChatbot && (
-          <div ref={editKBModalRef} className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-              <h2 className="text-xl font-semibold mb-4">Edit Knowledge Base</h2>
+          <div ref={editKBModalRef} className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.85)' }}>
+            <div className="rounded-lg p-6 w-full max-w-md" style={{ background: '#000', border: '1px solid #000000ff' }}>
+              <h2 className="text-xl font-semibold mb-4" style={{ color: '#fff' }}>Edit Knowledge Base</h2>
               <textarea
                 className="input w-full mb-4"
+                style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
                 rows={8}
                 value={editKBValue}
                 onChange={e => setEditKBValue(e.target.value)}
                 placeholder="Enter knowledge base content..."
                 disabled={editKBLoading}
               />
-              {editKBError && <div className="text-red-500 text-sm mb-2">{editKBError}</div>}
+              {editKBError && <div className="text-sm mb-2" style={{ color: '#fff' }}>{editKBError}</div>}
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setShowEditKBModal(false)}

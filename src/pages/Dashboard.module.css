@@ -1,9 +1,10 @@
 /* Dashboard.module.css */
 
 .dashboardRoot {
-  background: var(--background);
+  background: #000000;
   min-height: 100vh;
   font-family: 'Inter', 'Poppins', 'Rubik', sans-serif;
+  color: #ffffff;
 }
 
 .dashboardHeader {
@@ -20,14 +21,14 @@
 }
 
 .dashboardTitle {
-  color: var(--background-dark);
+  color: #ffffff;
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
 .dashboardSubtitle {
-  color: var(--text-secondary);
+  color: #ffffff;
   font-size: 1.1rem;
 }
 
@@ -45,19 +46,19 @@
 }
 
 .statsCard {
-  background: #fff;
+  background: #000000;
   border-radius: 14px;
-  box-shadow: var(--shadow-md);
+  box-shadow: none;
   padding: 1.5rem 1.2rem;
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  border: 1.5px solid #e0e7ef;
+  border: 1px solid #000000;
 }
 
 .statsIcon {
-  background: linear-gradient(135deg, var(--primary-color) 60%, var(--accent-color) 100%);
-  color: #fff;
+  background: #ffffff;
+  color: #000000;
   border-radius: 10px;
   width: 3rem;
   height: 3rem;
@@ -67,28 +68,28 @@
 }
 
 .statsLabel {
-  color: var(--text-secondary);
+  color: #ffffff;
   font-size: 1rem;
   font-weight: 500;
 }
 
 .statsValue {
-  color: var(--background-dark);
+  color: #ffffff;
   font-size: 2rem;
   font-weight: 700;
 }
 
 .card {
-  background: #fff;
+  background: #000000;
   border-radius: 14px;
-  box-shadow: var(--shadow-sm);
-  border: 1.5px solid #e0e7ef;
+  box-shadow: none;
+  border: 1px solid #000000;
   padding: 2rem 1.5rem;
   margin-bottom: 2rem;
 }
 
 .cardTitle {
-  color: var(--background-dark);
+  color: #ffffff;
   font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 0;
@@ -110,24 +111,24 @@
 }
 
 .chatbotCard {
-  background: var(--secondary-color);
+  background: #000000;
   border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-  border: 1.5px solid #e0e7ef;
+  box-shadow: none;
+  border: 1px solid #000000;
   padding: 1.5rem 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1.2rem;
-  transition: box-shadow 0.18s;
+  transition: none;
 }
 
 .chatbotCard:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: none;
 }
 
 .chatbotName {
-  color: var(--background-dark);
+  color: #ffffff;
   font-size: 1.15rem;
   font-weight: 600;
 }
@@ -137,37 +138,44 @@
   font-weight: 500;
   border-radius: 8px;
   padding: 0.2rem 0.7rem;
-  background: #e0e7ff;
-  color: var(--primary-color);
+  background: #000000;
+  color: #ffffff;
   margin-left: 0.7rem;
 }
 
 .chatbotStatus.inactive {
-  background: #f1f5f9;
-  color: #64748b;
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
 }
 
 .chatbotDesc {
-  color: var(--text-secondary);
+  color: #ffffff;
   font-size: 1rem;
   margin-bottom: 0.7rem;
 }
 
 .apiKeyLabel {
-  color: var(--background-dark);
+  color: #ffffff;
   font-size: 0.98rem;
   font-weight: 500;
   margin-bottom: 0.2rem;
 }
 
 .apiKeyInput {
-  background: #f1f5f9;
-  border: 1.5px solid #e0e7ef;
+  background: #000000;
+  border: 1px solid #000000;
   border-radius: 8px;
   font-size: 0.98rem;
   padding: 0.5rem 0.8rem;
-  color: var(--text-primary);
+  color: #ffffff;
   width: 100%;
+}
+
+.apiKeyInputRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .buttonRow {
@@ -176,84 +184,82 @@
   margin-top: 0.7rem;
 }
 
+/* Secondary button: black bg, white text, white border */
 .secondaryBtn {
-  background: #fff;
-  color: var(--primary-color);
-  border: 1.5px solid var(--primary-color);
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
   border-radius: 10px;
   padding: 0.7rem 1.2rem;
   font-size: 1.05rem;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: background 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: none;
+  transition: none;
 }
 
 .secondaryBtn:hover:not(:disabled) {
-  background: var(--primary-color);
-  color: #fff;
-  transform: scale(1.04);
+  background: #ffffff;
+  color: #000000;
+  transform: none;
 }
 
+/* Danger button: same black/white, no red */
 .dangerBtn {
-  background: #fff;
-  color: #dc2626;
-  border: 1.5px solid #dc2626;
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
   border-radius: 10px;
   padding: 0.7rem 1.2rem;
   font-size: 1.05rem;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: background 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: none;
+  transition: none;
 }
 
 .dangerBtn:hover:not(:disabled) {
-  background: #dc2626;
-  color: #fff;
-  transform: scale(1.04);
+  background: #ffffff;
+  color: #000000;
+  transform: none;
 }
 
+/* Primary button: white bg, black text */
 .createBtn {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 40%, #3b82f6 100%);
-  color: #fff;
-  border: none;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
   border-radius: 999px;
   padding: 0.75rem 1.6rem;
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+  box-shadow: none;
+  transition: none;
   overflow: hidden;
 }
 
 .createBtn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(29, 78, 216, 0.2));
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: none;
 }
 
 .createBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 32px rgba(37, 99, 235, 0.3);
-  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 40%, #60a5fa 100%);
+  transform: none;
+  box-shadow: none;
+  background: #ffffff;
 }
 
 .createBtn:hover::after {
-  opacity: 1;
+  display: none;
 }
 
 .createBtn:focus-visible {
-  outline: 3px solid rgba(59, 130, 246, 0.4);
+  outline: 2px solid #000000;
   outline-offset: 3px;
 }
 
@@ -263,40 +269,35 @@
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 40%, #3b82f6 100%);
-  color: #fff;
-  border: none;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
   border-radius: 999px;
   padding: 0.55rem 1.3rem;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+  box-shadow: none;
+  transition: none;
   overflow: hidden;
 }
 
 .createBtnSmall::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.18), rgba(29, 78, 216, 0.18));
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: none;
 }
 
 .createBtnSmall:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.26);
-  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 40%, #60a5fa 100%);
+  transform: none;
+  box-shadow: none;
+  background: #ffffff;
 }
 
 .createBtnSmall:hover::after {
-  opacity: 1;
+  display: none;
 }
 
 .createBtnSmall:focus-visible {
-  outline: 3px solid rgba(59, 130, 246, 0.35);
+  outline: 2px solid #000000;
   outline-offset: 3px;
 }
 
@@ -308,81 +309,138 @@
   scroll-margin-top: 96px;
 }
 
+/* Modal cancel: secondary style */
 .modalCancelBtn {
-  background: #fff;
-  color: var(--primary-color);
-  border: 1.5px solid var(--primary-color);
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
   border-radius: 10px;
   padding: 0.7rem 1.2rem;
   font-size: 1.05rem;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: background 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: none;
+  transition: none;
 }
 
 .modalCancelBtn:hover:not(:disabled) {
-  background: var(--primary-color);
-  color: #fff;
-  transform: scale(1.04);
+  background: #ffffff;
+  color: #000000;
+  transform: none;
 }
 
+/* Modal create: primary style */
 .modalCreateBtn {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 40%, #3b82f6 100%);
-  color: #fff;
-  border: none;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
   border-radius: 10px;
   padding: 0.7rem 1.2rem;
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+  box-shadow: none;
+  transition: none;
   overflow: hidden;
 }
 
 .modalCreateBtn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(29, 78, 216, 0.2));
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: none;
 }
 
 .modalCreateBtn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 32px rgba(37, 99, 235, 0.3);
-  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 40%, #60a5fa 100%);
+  transform: none;
+  box-shadow: none;
+  background: #ffffff;
 }
 
 .modalCreateBtn:hover::after {
-  opacity: 1;
+  display: none;
 }
 
 .modalCreateBtn:focus-visible {
-  outline: 3px solid rgba(59, 130, 246, 0.4);
+  outline: 2px solid #000000;
   outline-offset: 3px;
+}
+
+/* Empty state */
+.emptyChatbotCard {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.emptyChatbotTitle {
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.emptyChatbotSubtitle {
+  color: #ffffff;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Generic btn used in edit KB modal */
+.btn {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: none;
+  transition: none;
+}
+
+.btn:hover:not(:disabled) {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* Fancy btn used for save in edit KB modal */
+.fancyBtn {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none;
+  transition: none;
+}
+
+.fancyBtn:hover:not(:disabled) {
+  background: #ffffff;
+  color: #000000;
 }
 
 @media (max-width: 900px) {
   .statsGrid {
     grid-template-columns: 1fr;
   }
+
   .card {
     padding: 1.2rem 0.7rem;
   }
+
   .chatbotCard {
     flex-direction: column;
     gap: 0.7rem;
   }
+
   .dashboardHeaderActions {
     width: 100%;
     justify-content: flex-start;
   }
-} 
+}

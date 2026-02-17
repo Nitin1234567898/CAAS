@@ -7,26 +7,12 @@
 }
 
 .heroSection {
-  background: linear-gradient(120deg, var(--background-dark) 0%, var(--primary-color) 60%, var(--background) 100%);
-  color: #fff;
+  background: #000000;
+  color: #ffffff;
   padding: 4rem 0 3rem 0;
   text-align: center;
-  box-shadow: 0 8px 32px 0 rgba(30,58,138,0.10);
   position: relative;
   z-index: 1;
-}
-
-.heroSection::after {
-  content: '';
-  display: block;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 48px;
-  background: linear-gradient(to bottom, rgba(37,99,235,0.10) 0%, rgba(241,245,249,0.0) 100%);
-  pointer-events: none;
-  z-index: 2;
 }
 
 .heroTitle {
@@ -38,7 +24,7 @@
 
 .heroSubtitle {
   font-size: 1.25rem;
-  color: #e0e7ef;
+  color: #ffffff;
   margin-bottom: 2rem;
   max-width: 600px;
   margin-left: auto;
@@ -78,7 +64,8 @@
   text-align: center;
 }
 
-.featuresTitle, .featuresSubtitle {
+.featuresTitle,
+.featuresSubtitle {
   text-align: center;
 }
 
@@ -93,7 +80,7 @@
   background: var(--secondary-color);
   border-radius: 14px;
   box-shadow: var(--shadow-sm);
-  border: 1.5px solid #e0e7ef;
+  border: none;
   padding: 2rem 1.2rem 1.5rem 1.2rem;
   text-align: center;
   transition: box-shadow 0.18s;
@@ -147,24 +134,44 @@
 }
 
 .howItWorksGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  /* Gap handled by arrows width/padding */
+  margin-top: 3rem;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flowArrow {
+  flex: 0 0 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  opacity: 0.8;
 }
 
 .howItWorksStep {
-  background: #fff;
+  background: #000;
   border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-  border: 1.5px solid #e0e7ef;
+  box-shadow: none;
+  border: 1px solid #fff;
   padding: 1.5rem 1.2rem;
   text-align: center;
+  flex: 1;
+  max-width: 300px;
+  position: relative;
+  z-index: 2;
 }
 
 .howItWorksStepNumber {
-  background: linear-gradient(135deg, var(--primary-color) 60%, var(--accent-color) 100%);
-  color: #fff;
+  background: #fff;
+  /* Updated to match theme */
+  color: #000;
   border-radius: 50%;
   width: 2.2rem;
   height: 2.2rem;
@@ -177,56 +184,42 @@
 }
 
 .howItWorksStepTitle {
-  color: var(--background-dark);
+  color: #fff;
   font-size: 1.08rem;
   font-weight: 600;
   margin-bottom: 0.4rem;
 }
 
 .howItWorksStepDesc {
-  color: var(--text-secondary);
+  color: #fff;
   font-size: 0.98rem;
 }
 
-.ctaSection {
-  background: linear-gradient(120deg, var(--primary-color) 60%, var(--background) 100%);
-  color: #fff;
-  padding: 3rem 0 2.5rem 0;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.ctaSection::after {
-  content: '';
-  display: block;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 48px;
-  background: linear-gradient(to bottom, rgba(37,99,235,0.10) 0%, rgba(241,245,249,0.0) 100%);
-  pointer-events: none;
-  z-index: 2;
-}
-
-.ctaSectionTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.7rem;
-}
-
-.ctaSectionSubtitle {
-  color: #e0e7ef;
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-}
 
 @media (max-width: 900px) {
-  .featuresGrid, .howItWorksGrid {
+  .featuresGrid {
     grid-template-columns: 1fr;
   }
+
+  .howItWorksGrid {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .flowArrow {
+    transform: rotate(90deg);
+    height: 60px;
+    width: 60px;
+    margin: -10px 0;
+    /* Pull items closer visually if needed */
+  }
+
+  .howItWorksStep {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .heroTitle {
     font-size: 2rem;
   }
-} 
+}

@@ -1,8 +1,8 @@
 /* Navbar.module.css */
 
 .navbar {
-  background: var(--background-dark);
-  box-shadow: var(--shadow-md);
+  background: #000000;
+  box-shadow: none;
   padding: 0.5rem 0;
 }
 
@@ -19,14 +19,14 @@
 }
 
 .logo-title {
-  color: #fff;
+  color: #ffffff;
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.5px;
 }
 
 .logo-subtitle {
-  color: #cbd5e1;
+  color: #ffffff;
   font-size: 0.95rem;
   font-weight: 400;
 }
@@ -45,23 +45,24 @@
   border-radius: 8px;
   font-size: 1.04rem;
   font-weight: 500;
-  color: #1e293b;
-  background: rgba(37, 99, 235, 0.10);
-  border: none;
+  color: #ffffff;
+  background: #000000;
+  border: 1px solid #000000;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.18s;
+  transition: none;
   overflow: hidden;
   z-index: 1;
-  box-shadow: 0 2px 8px 0 rgba(37, 99, 235, 0.08);
+  box-shadow: none;
 }
 
-.navLink:hover, .navLink:focus {
-  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--purple-accent));
-  color: #fff;
+.navLink:hover,
+.navLink:focus {
+  background: #000000;
+  color: #ffffff;
   text-decoration: none;
-  box-shadow: 0 4px 16px 0 rgba(37, 99, 235, 0.16);
-  transform: translateY(-2px) scale(1.04);
+  box-shadow: none;
+  transform: none;
 }
 
 .navLink::after {
@@ -72,21 +73,23 @@
   right: 1.2rem;
   bottom: 0.4rem;
   height: 2px;
-  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--purple-accent));
+  background: #fffdfd;
   border-radius: 2px;
   opacity: 0;
   transform: scaleX(0.6);
-  transition: opacity 0.18s, transform 0.18s;
+  transition: none;
 }
 
-.navLink:hover::after, .navLink:focus::after, .active::after {
+.navLink:hover::after,
+.navLink:focus::after,
+.active::after {
   opacity: 1;
   transform: scaleX(1);
 }
 
 .active {
-  color: #fff;
+  color: #000000;
   font-weight: 700;
-  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--purple-accent));
-  box-shadow: 0 4px 16px 0 rgba(37, 99, 235, 0.18);
-} 
+  background: #000000;
+  box-shadow: none;
+}

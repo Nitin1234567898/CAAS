@@ -33,6 +33,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
     scrollToBottom();
   }, [messages]);
 
+  // Lock body scroll when chat modal is open
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading || !user) return;
 
@@ -161,7 +170,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
               </div>
             ))
           )}
-          
+
           {isLoading && (
             <div className={styles.chatLoading}>
               <div className={styles.chatLoadingBubble}>
@@ -172,7 +181,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
 
