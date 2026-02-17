@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { SignedIn, SignedOut } from '@clerk/clerk-react';
+import { SignedOut } from '@clerk/clerk-react';
 import styles from './HomePage.module.css';
 
 const HomePage: React.FC = () => {

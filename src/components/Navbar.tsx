@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/clerk-react';
-import styles from './Navbar.module.css';
 
 const Navbar: React.FC = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const isActive = (path: string) => location.pathname === path;
 
   return (
     <nav className="navbar" style={{ background: '#000', boxShadow: 'none' }}>
