@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { supabase } from '../lib/supabase';
+import GlassButton from './GlassButton';
+import GlassCard from './GlassCard';
 import styles from './ChatInterface.module.css';
 
 interface Message {
@@ -23,17 +25,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatbotInitial = chatbotName.trim().charAt(0).toUpperCase() || 'A';
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
 
-  // Lock body scroll when chat modal is open
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -49,15 +45,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
       id: Date.now().toString(),
       text: inputMessage,
       isUser: true,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
 
     try {
-      // Call Supabase Edge Function
       const { data, error } = await supabase.functions.invoke('chatbot-chat', {
         headers: {
           'X-Api-Key': apiKey,
@@ -65,8 +60,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
         body: {
           chatbotId,
           message: inputMessage,
-          userId: user.id
-        }
+          userId: user.id,
+        },
       });
 
       if (error) throw error;
@@ -75,162 +70,78 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatbotId, chatbotName, o
         id: (Date.now() + 1).toString(),
         text: data.response,
         isUser: false,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: 'Sorry, I encountered an error. Please try again.',
-        isUser: false,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, botMessage]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          text: 'Sorry, I encountered an error. Please try again.',
+          isUser: false,
+          timestamp: new Date(),
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
       sendMessage();
     }
   };
 
   return (
-    <div className={styles.chatModalOverlay}>
-      <div className={styles.chatModal}>
-        <div className={styles.chatHeader}>
-          <div className={styles.chatHeaderContent}>
-            <div className={styles.chatAvatar} title={chatbotName} aria-hidden="true">
-              <span>{chatbotInitial}</span>
-            </div>
-            <div>
-              <h3 className={styles.chatTitle}>{chatbotName}</h3>
-              <p className={styles.chatSubtitle}>AI Chatbot</p>
-            </div>
+    <div className={styles.overlay}>
+      <GlassCard className={styles.modal}>
+        <div className={styles.header}>
+          <div>
+            <p className="ui-label">Live Test</p>
+            <h3>{chatbotName}</h3>
           </div>
-          <div className={styles.chatHeaderRight}>
-            <button
-              type="button"
-              aria-label={`Close ${chatbotName} chat`}
-              onClick={(e) => {
-                onClose();
-                // Ripple effect
-                const btn = e.currentTarget;
-                const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-                if (ripple) {
-                  ripple.classList.remove('show');
-                  void ripple.offsetWidth;
-                  ripple.classList.add('show');
-                  const rect = btn.getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const y = e.clientY - rect.top;
-                  ripple.style.left = `${x}px`;
-                  ripple.style.top = `${y}px`;
-                }
-              }}
-              className={styles.chatCloseBtn}
-            >
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              <span className="ripple-effect" aria-hidden="true"></span>
-            </button>
-          </div>
+          <GlassButton variant="secondary" onClick={onClose}>
+            Close
+          </GlassButton>
         </div>
 
-        {/* Messages */}
-        <div className={styles.chatMessages}>
-          {messages.length === 0 ? (
-            <div className={styles.chatEmptyState}>
-              <div className={styles.chatEmptyIcon}>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <p className={styles.chatEmptyTitle}>Start chatting with {chatbotName}</p>
-              <p className={styles.chatEmptySubtitle}>Type a message below to begin</p>
-            </div>
-          ) : (
-            messages.map((message) => (
-              <div
-                key={message.id}
-                className={message.isUser ? styles.chatMessage + ' ' + styles.user : styles.chatMessage}
-              >
-                <div className={message.isUser ? styles.chatMessageBubble + ' ' + styles.user : styles.chatMessageBubble}>
-                  <p className={styles.chatMessageText}>{message.text}</p>
-                  <p className={message.isUser ? styles.chatMessageTime + ' ' + styles.user : styles.chatMessageTime}>
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
-              </div>
-            ))
-          )}
+        <div className={styles.messages}>
+          {messages.length === 0 && <p className="ui-muted">Start chatting with {chatbotName}.</p>}
 
-          {isLoading && (
-            <div className={styles.chatLoading}>
-              <div className={styles.chatLoadingBubble}>
-                <div className={styles.chatLoadingContent}>
-                  <div className={styles.chatSpinner}></div>
-                  <span className={styles.chatLoadingText}>Typing...</span>
-                </div>
-              </div>
+          {messages.map((message) => (
+            <div key={message.id} className={`${styles.bubble} ${message.isUser ? styles.user : styles.bot}`}>
+              <p>{message.text}</p>
+              <small>
+                {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </small>
             </div>
-          )}
+          ))}
 
+          {isLoading && <p className={styles.typing}>Typing...</p>}
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
-        <div className={styles.chatInputContainer}>
-          <div className={styles.chatInputWrapper}>
-            <textarea
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
-              className={styles.chatTextarea}
-              rows={1}
-              disabled={isLoading}
-            />
-            <button
-              type="button"
-              onClick={(e) => {
-                sendMessage();
-                // Ripple effect
-                const btn = e.currentTarget;
-                const ripple = btn.querySelector('.ripple-effect') as HTMLSpanElement;
-                if (ripple) {
-                  ripple.classList.remove('show');
-                  void ripple.offsetWidth;
-                  ripple.classList.add('show');
-                  const rect = btn.getBoundingClientRect();
-                  const x = e.clientX - rect.left;
-                  const y = e.clientY - rect.top;
-                  ripple.style.left = `${x}px`;
-                  ripple.style.top = `${y}px`;
-                }
-              }}
-              className={styles.chatSendBtn}
-              disabled={!inputMessage.trim() || isLoading}
-            >
-              <span className={styles.chatSendIcon} aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M4 4l7.29 7.29a1 1 0 010 1.42L4 20l16-8L4 4z" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              <span className={styles.chatSendLabel}>Send</span>
-              <span className="ripple-effect" aria-hidden="true"></span>
-            </button>
-          </div>
+        <div className={styles.inputRow}>
+          <textarea
+            value={inputMessage}
+            onChange={(event) => setInputMessage(event.target.value)}
+            onKeyDown={handleKeyPress}
+            placeholder="Type your message"
+            className="glass-textarea"
+            rows={2}
+            disabled={isLoading}
+          />
+          <GlassButton variant="primary" onClick={sendMessage} disabled={!inputMessage.trim() || isLoading}>
+            Send
+          </GlassButton>
         </div>
-      </div>
+      </GlassCard>
     </div>
   );
 };
 
-export default ChatInterface; 
+export default ChatInterface;

@@ -1,446 +1,263 @@
-/* Dashboard.module.css */
-
-.dashboardRoot {
-  background: #000000;
-  min-height: 100vh;
-  font-family: 'Inter', 'Poppins', 'Rubik', sans-serif;
-  color: #ffffff;
+.root {
+  padding-top: 1rem;
 }
 
-.dashboardHeader {
-  margin-bottom: 2rem;
+.center {
+  min-height: calc(100vh - 120px);
+  display: block;
+}
+
+.loadingLayout {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.loadingHeader {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.loadingStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.loadingCard {
+  padding: 0.9rem;
+}
+
+.loadingListCard {
+  padding: 1rem;
+}
+
+.loadingRows {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(155, 186, 233, 0.14);
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(182, 228, 255, 0.45), transparent);
+  animation: shimmer 1.35s infinite;
+}
+
+.skeletonLabel {
+  width: 120px;
+  height: 12px;
+}
+
+.skeletonTitle {
+  width: min(560px, 70%);
+  height: 34px;
+}
+
+.skeletonText {
+  width: min(480px, 60%);
+  height: 16px;
+}
+
+.skeletonValue {
+  width: 70px;
+  height: 28px;
+  margin-top: 0.6rem;
+}
+
+.skeletonSectionTitle {
+  width: 180px;
+  height: 24px;
+}
+
+.skeletonRow {
+  width: 100%;
+  height: 98px;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.header {
   display: flex;
-  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.dashboardHeaderText {
-  max-width: 600px;
-}
-
-.dashboardTitle {
-  color: #ffffff;
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.dashboardSubtitle {
-  color: #ffffff;
-  font-size: 1.1rem;
-}
-
-.dashboardHeaderActions {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
+.title {
+  font-size: clamp(1.55rem, 4vw, 2.45rem);
+  margin-bottom: 0.35rem;
 }
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 0.9rem;
 }
 
-.statsCard {
-  background: #000000;
-  border-radius: 14px;
-  box-shadow: none;
-  padding: 1.5rem 1.2rem;
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  border: 1px solid #000000;
+.statCard {
+  padding: 0.9rem;
 }
 
-.statsIcon {
-  background: #ffffff;
-  color: #000000;
-  border-radius: 10px;
-  width: 3rem;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.statCard strong {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.65rem;
 }
 
-.statsLabel {
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 500;
+.listCard {
+  padding: 1rem;
 }
 
-.statsValue {
-  color: #ffffff;
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.card {
-  background: #000000;
-  border-radius: 14px;
-  box-shadow: none;
-  border: 1px solid #000000;
-  padding: 2rem 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.cardTitle {
-  color: #ffffff;
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 0;
-}
-
-.cardHeader {
+.listHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.2rem;
-  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.listHeader h2 {
+  font-size: 1.25rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 1.6rem 0.6rem;
+}
+
+.emptyState h3 {
+  margin-bottom: 0.4rem;
 }
 
 .chatbotList {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
+  display: grid;
+  gap: 0.75rem;
 }
 
 .chatbotCard {
-  background: #000000;
-  border-radius: 12px;
-  box-shadow: none;
-  border: 1px solid #000000;
-  padding: 1.5rem 1.2rem;
+  padding: 0.95rem;
+}
+
+.rowTop h3 {
+  margin-bottom: 0.35rem;
+}
+
+.status {
+  display: inline-flex;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.active {
+  border: 1px solid rgba(117, 255, 207, 0.45);
+  color: #9affdc;
+  background: rgba(22, 78, 68, 0.35);
+}
+
+.inactive {
+  border: 1px solid rgba(255, 161, 188, 0.4);
+  color: #ffc0d4;
+  background: rgba(107, 30, 56, 0.32);
+}
+
+.apiRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.anchor {
+  height: 1px;
+}
+
+.modal,
+.modalWide {
+  padding: 1rem;
+}
+
+.modalWide {
+  width: min(95vw, 860px);
+}
+
+.formGrid {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.modalHeaderRow {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 1.2rem;
-  transition: none;
-}
-
-.chatbotCard:hover {
-  box-shadow: none;
-}
-
-.chatbotName {
-  color: #ffffff;
-  font-size: 1.15rem;
-  font-weight: 600;
-}
-
-.chatbotStatus {
-  font-size: 0.92rem;
-  font-weight: 500;
-  border-radius: 8px;
-  padding: 0.2rem 0.7rem;
-  background: #000000;
-  color: #ffffff;
-  margin-left: 0.7rem;
-}
-
-.chatbotStatus.inactive {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-}
-
-.chatbotDesc {
-  color: #ffffff;
-  font-size: 1rem;
-  margin-bottom: 0.7rem;
-}
-
-.apiKeyLabel {
-  color: #ffffff;
-  font-size: 0.98rem;
-  font-weight: 500;
-  margin-bottom: 0.2rem;
-}
-
-.apiKeyInput {
-  background: #000000;
-  border: 1px solid #000000;
-  border-radius: 8px;
-  font-size: 0.98rem;
-  padding: 0.5rem 0.8rem;
-  color: #ffffff;
-  width: 100%;
-}
-
-.apiKeyInputRow {
-  display: flex;
-  gap: 0.5rem;
   align-items: center;
-}
-
-.buttonRow {
-  display: flex;
   gap: 0.7rem;
-  margin-top: 0.7rem;
+  margin-bottom: 0.8rem;
 }
 
-/* Secondary button: black bg, white text, white border */
-.secondaryBtn {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  padding: 0.7rem 1.2rem;
-  font-size: 1.05rem;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
+.integrationBlock {
+  margin-bottom: 0.8rem;
 }
 
-.secondaryBtn:hover:not(:disabled) {
-  background: #ffffff;
-  color: #000000;
-  transform: none;
+.pre {
+  margin: 0;
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(173, 215, 255, 0.24);
+  background: rgba(9, 19, 42, 0.86);
+  color: #d9e9ff;
+  font-size: 0.86rem;
+  overflow-x: auto;
 }
 
-/* Danger button: same black/white, no red */
-.dangerBtn {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  padding: 0.7rem 1.2rem;
-  font-size: 1.05rem;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
+.error {
+  margin-top: 0.45rem;
+  color: #ffd3de;
 }
 
-.dangerBtn:hover:not(:disabled) {
-  background: #ffffff;
-  color: #000000;
-  transform: none;
-}
-
-/* Primary button: white bg, black text */
-.createBtn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #000000;
-  border-radius: 999px;
-  padding: 0.75rem 1.6rem;
-  font-size: 1.05rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
-  overflow: hidden;
-}
-
-.createBtn::after {
-  display: none;
-}
-
-.createBtn:hover {
-  transform: none;
-  box-shadow: none;
-  background: #ffffff;
-}
-
-.createBtn:hover::after {
-  display: none;
-}
-
-.createBtn:focus-visible {
-  outline: 2px solid #000000;
-  outline-offset: 3px;
-}
-
-.createBtnSmall {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #000000;
-  border-radius: 999px;
-  padding: 0.55rem 1.3rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
-  overflow: hidden;
-}
-
-.createBtnSmall::after {
-  display: none;
-}
-
-.createBtnSmall:hover {
-  transform: none;
-  box-shadow: none;
-  background: #ffffff;
-}
-
-.createBtnSmall:hover::after {
-  display: none;
-}
-
-.createBtnSmall:focus-visible {
-  outline: 2px solid #000000;
-  outline-offset: 3px;
-}
-
-.createSectionAnchor {
-  position: relative;
-  margin-top: 4rem;
-  width: 100%;
-  height: 1px;
-  scroll-margin-top: 96px;
-}
-
-/* Modal cancel: secondary style */
-.modalCancelBtn {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  padding: 0.7rem 1.2rem;
-  font-size: 1.05rem;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
-}
-
-.modalCancelBtn:hover:not(:disabled) {
-  background: #ffffff;
-  color: #000000;
-  transform: none;
-}
-
-/* Modal create: primary style */
-.modalCreateBtn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  padding: 0.7rem 1.2rem;
-  font-size: 1.05rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
-  overflow: hidden;
-}
-
-.modalCreateBtn::after {
-  display: none;
-}
-
-.modalCreateBtn:hover:not(:disabled) {
-  transform: none;
-  box-shadow: none;
-  background: #ffffff;
-}
-
-.modalCreateBtn:hover::after {
-  display: none;
-}
-
-.modalCreateBtn:focus-visible {
-  outline: 2px solid #000000;
-  outline-offset: 3px;
-}
-
-/* Empty state */
-.emptyChatbotCard {
-  text-align: center;
-  padding: 3rem 1rem;
-}
-
-.emptyChatbotTitle {
-  color: #ffffff;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.emptyChatbotSubtitle {
-  color: #ffffff;
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-/* Generic btn used in edit KB modal */
-.btn {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  padding: 0.7rem 1.2rem;
-  font-size: 1.05rem;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
-}
-
-.btn:hover:not(:disabled) {
-  background: #ffffff;
-  color: #000000;
-}
-
-/* Fancy btn used for save in edit KB modal */
-.fancyBtn {
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  padding: 0.7rem 1.2rem;
-  font-size: 1.05rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
-}
-
-.fancyBtn:hover:not(:disabled) {
-  background: #ffffff;
-  color: #000000;
-}
-
-@media (max-width: 900px) {
+@media (max-width: 920px) {
+  .loadingStats,
   .statsGrid {
     grid-template-columns: 1fr;
   }
 
-  .card {
-    padding: 1.2rem 0.7rem;
-  }
-
-  .chatbotCard {
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-
-  .dashboardHeaderActions {
-    width: 100%;
-    justify-content: flex-start;
+  .header,
+  .listHeader,
+  .modalHeaderRow,
+  .apiRow {
+    grid-template-columns: 1fr;
+    display: grid;
   }
 }

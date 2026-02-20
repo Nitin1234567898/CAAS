@@ -1,257 +1,90 @@
-/* IntegrationGuide.module.css */
-
-.guideRoot {
-  background: #000000;
-  min-height: 100vh;
-  font-family: 'Inter', 'Poppins', 'Rubik', sans-serif;
-  color: #ffffff;
+.root {
+  padding-top: 1rem;
 }
 
-.guideContainer {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2.5rem 1.2rem 3rem 1.2rem;
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 1rem;
+}
+
+.header {
+  margin-bottom: 1rem;
+}
+
+.header h1 {
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  margin-bottom: 0.45rem;
+}
+
+.card {
+  padding: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.card h2,
+.card h3 {
+  margin-bottom: 0.55rem;
+}
+
+.card ol,
+.card ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.card li + li {
+  margin-top: 0.4rem;
+}
+
+.tabRow {
   display: flex;
-  gap: 2.5rem;
-}
-
-.guideMain {
-  flex: 1 1 0%;
-  min-width: 0;
-}
-
-.guideSidebar {
-  width: 270px;
-  background: #000000;
-  border-radius: 14px;
-  box-shadow: none;
-  border: 1px solid #000000;
-  padding: 2rem 1.2rem 1.5rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  font-size: 1rem;
-  color: #ffffff;
-}
-
-.guideHeader {
-  margin-bottom: 2.2rem;
-}
-
-.guideTitle {
-  color: #ffffff;
-  font-size: 2.2rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-}
-
-.guideDesc {
-  color: #ffffff;
-  font-size: 1.15rem;
-}
-
-.guideCard {
-  background: #000000;
-  border-radius: 14px;
-  box-shadow: none;
-  border: 1px solid #000000;
-  padding: 2rem 1.2rem 1.5rem 1.2rem;
-  margin-bottom: 2rem;
-}
-
-.guideSectionTitle {
-  color: #ffffff;
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 1.1rem;
-}
-
-.guideTabs {
-  display: flex;
-  gap: 1.2rem;
-  margin-bottom: 1.5rem;
-}
-
-.guideTabBtn {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  padding: 0.7rem 1.5rem;
-  font-size: 1.05rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
-}
-
-.guideTabBtn.active,
-.guideTabBtn:hover {
-  background: #ffffff;
-  color: #000000;
-  transform: none;
-}
-
-.guideCodeBlock {
-  background: #000000;
-  color: #ffffff;
-  border-radius: 10px;
-  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-  font-size: 1.01rem;
-  padding: 1.2rem 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1.2rem;
-  overflow-x: auto;
-  box-shadow: none;
-  border: 1px solid #000000;
-}
-
-.guideStepList {
-  margin: 0.7rem 0 0 1.2rem;
-  color: #ffffff;
-  font-size: 1rem;
-}
-
-.guideChoiceBtns {
-  display: flex;
-  gap: 1.2rem;
-  margin-bottom: 1.5rem;
+  gap: 0.65rem;
   flex-wrap: wrap;
 }
 
-.guideChoiceBtn {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  padding: 0.8rem 1.7rem;
-  font-size: 1.08rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: none;
-  transition: none;
-  position: relative;
-  overflow: hidden;
-  flex: 1;
-  min-width: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
+.backBtn {
+  margin: 0.8rem 0;
 }
 
-.guideChoiceBtn.active,
-.guideChoiceBtn:hover {
-  background: #ffffff;
-  color: #000000;
-  transform: none;
-}
-
-.guideChoiceBtn .sparkleEffect {
-  display: none;
-}
-
-.guideBtnDesc {
-  font-size: 0.98rem;
-  color: #ffffff;
-  font-weight: 400;
-  margin-top: 0.3rem;
-}
-
-.guideApiDocs {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.guideApiTitle {
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.guideApiCode {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #ffffff;
-  border-radius: 6px;
-  padding: 0.5rem 0.8rem;
-  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-  font-size: 0.95rem;
-  display: block;
-}
-
-.guideApiPre {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #ffffff;
-  border-radius: 6px;
-  padding: 1rem;
-  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-  font-size: 0.95rem;
-  overflow-x: auto;
-  margin: 0;
-}
-
-.guideSidebarTitle {
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 0.8rem;
-}
-
-.guideTipsList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  color: #ffffff;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.guideTipsList li {
-  margin-bottom: 0.7rem;
-}
-
-.guideTipsList code {
-  background: #000000;
-  color: #ffffff;
-  border: 1px solid #ffffff;
-  border-radius: 4px;
-  padding: 0.2rem 0.4rem;
-  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-  font-size: 0.9rem;
-}
-
-.guideTroubleshootingList {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.guideTroubleshootingTitle {
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-}
-
-.guideTroubleshootingDesc {
-  color: #ffffff;
-  font-size: 0.95rem;
+.code {
+  margin-top: 0.7rem;
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: 1px solid rgba(173, 215, 255, 0.26);
+  background: rgba(9, 19, 42, 0.86);
+  color: #d9e9ff;
+  overflow: auto;
+  max-height: 560px;
+  font-size: 0.88rem;
   line-height: 1.5;
-  margin: 0;
+  font-family: 'Consolas', 'Fira Code', monospace;
+  white-space: pre;
 }
 
-@media (max-width: 1100px) {
-  .guideContainer {
-    flex-direction: column;
-    gap: 1.5rem;
+.inline {
+  display: block;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid rgba(173, 215, 255, 0.24);
+  background: rgba(10, 20, 45, 0.75);
+  font-size: 0.85rem;
+}
+
+.sidebar {
+  position: sticky;
+  top: 95px;
+  height: fit-content;
+}
+
+@media (max-width: 980px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 
-  .guideSidebar {
-    width: 100%;
-    margin-bottom: 2rem;
+  .sidebar {
+    position: static;
   }
 }

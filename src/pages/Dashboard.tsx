@@ -2,6 +2,9 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { supabase, Chatbot } from '../lib/supabase';
 import ChatInterface from '../components/ChatInterface';
+import GlassCard from '../components/GlassCard';
+import GlassButton from '../components/GlassButton';
+import CompletionOverlay from '../features/completion/CompletionOverlay';
 import styles from './Dashboard.module.css';
 
 const Dashboard: React.FC = () => {
@@ -12,12 +15,15 @@ const Dashboard: React.FC = () => {
   const [showChatModal, setShowChatModal] = useState(false);
   const [showIntegrationModal, setShowIntegrationModal] = useState(false);
   const [selectedChatbot, setSelectedChatbot] = useState<Chatbot | null>(null);
+  const [showCompletionOverlay, setShowCompletionOverlay] = useState(false);
+
   const [newChatbot, setNewChatbot] = useState({
     name: '',
     description: '',
     personality: 'professional',
-    knowledgeBase: ''
+    knowledgeBase: '',
   });
+
   const [showEditKBModal, setShowEditKBModal] = useState(false);
   const [editKBValue, setEditKBValue] = useState('');
   const [editKBLoading, setEditKBLoading] = useState(false);
@@ -25,11 +31,22 @@ const Dashboard: React.FC = () => {
   const [editKBChatbot, setEditKBChatbot] = useState<Chatbot | null>(null);
 
   const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-
-  const editKBModalRef = useRef<HTMLDivElement | null>(null);
   const createSectionRef = useRef<HTMLDivElement | null>(null);
 
-  // Fetch chatbots from Supabase
+  const triggerConfetti = (x?: number, y?: number) => {
+    window.dispatchEvent(
+      new CustomEvent('app:confetti', {
+        detail: { x: x ?? window.innerWidth / 2, y: y ?? window.innerHeight / 2 },
+      })
+    );
+  };
+
+  const evaluateGroupCompletion = (bots: Chatbot[]) => {
+    if (bots.length > 0 && bots.every((bot) => bot.status === 'active')) {
+      setShowCompletionOverlay(true);
+    }
+  };
+
   const fetchChatbots = useCallback(async () => {
     if (!user) return;
 
@@ -55,18 +72,13 @@ const Dashboard: React.FC = () => {
     }
   }, [user, fetchChatbots]);
 
-  useEffect(() => {
-    if (showEditKBModal && editKBModalRef.current) {
-      editKBModalRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [showEditKBModal]);
-
-  const handleCreateChatbot = async () => {
+  const handleCreateChatbot = async (x?: number, y?: number) => {
     if (!user) return;
 
     try {
-      // Generate a unique API key
-      const newApiKey = `cb_live_${[...Array(24)].map(() => Math.random().toString(36)[2]).join('')}`;
+      const newApiKey = `cb_live_${[...Array(24)]
+        .map(() => Math.random().toString(36)[2])
+        .join('')}`;
 
       const { data, error } = await supabase
         .from('chatbots')
@@ -76,34 +88,41 @@ const Dashboard: React.FC = () => {
           personality: newChatbot.personality,
           knowledge_base: newChatbot.knowledgeBase,
           user_id: user.id,
-          api_key: newApiKey, // Save the new API key
+          api_key: newApiKey,
         })
         .select()
         .single();
 
       if (error) throw error;
 
-      setChatbots([data, ...chatbots]);
+      const nextBots = [data, ...chatbots];
+      setChatbots(nextBots);
       setNewChatbot({ name: '', description: '', personality: 'professional', knowledgeBase: '' });
       setShowCreateModal(false);
+      triggerConfetti(x, y);
+      evaluateGroupCompletion(nextBots);
     } catch (error) {
       console.error('Error creating chatbot:', error);
     }
   };
 
-  const toggleChatbotStatus = async (id: string, currentStatus: string) => {
+  const toggleChatbotStatus = async (id: string, currentStatus: string, x?: number, y?: number) => {
     try {
       const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-      const { error } = await supabase
-        .from('chatbots')
-        .update({ status: newStatus })
-        .eq('id', id);
+      const { error } = await supabase.from('chatbots').update({ status: newStatus }).eq('id', id);
 
       if (error) throw error;
 
-      setChatbots(chatbots.map(bot =>
+      const nextBots = chatbots.map((bot) =>
         bot.id === id ? { ...bot, status: newStatus as 'active' | 'inactive' } : bot
-      ));
+      );
+      setChatbots(nextBots);
+
+      if (newStatus === 'active') {
+        triggerConfetti(x, y);
+      }
+
+      evaluateGroupCompletion(nextBots);
     } catch (error) {
       console.error('Error updating chatbot status:', error);
     }
@@ -111,14 +130,10 @@ const Dashboard: React.FC = () => {
 
   const deleteChatbot = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('chatbots')
-        .delete()
-        .eq('id', id);
-
+      const { error } = await supabase.from('chatbots').delete().eq('id', id);
       if (error) throw error;
 
-      setChatbots(prev => prev.filter(bot => bot.id !== id));
+      setChatbots((prev) => prev.filter((bot) => bot.id !== id));
 
       if (selectedChatbot?.id === id) {
         closeChatModal();
@@ -133,9 +148,9 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const copyApiKey = (apiKey: string) => {
+  const copyApiKey = (apiKey: string, x?: number, y?: number) => {
     navigator.clipboard.writeText(apiKey);
-    // You could add a toast notification here
+    triggerConfetti(x, y);
   };
 
   const openChatModal = (chatbot: Chatbot) => {
@@ -161,7 +176,7 @@ const Dashboard: React.FC = () => {
   const handleOpenCreateModal = () => {
     if (chatbots.length > 0 && createSectionRef.current) {
       createSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setTimeout(() => setShowCreateModal(true), 350);
+      setTimeout(() => setShowCreateModal(true), 320);
     } else {
       setShowCreateModal(true);
     }
@@ -169,503 +184,317 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#000' }}>
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 mx-auto" style={{ borderBottom: '2px solid #000000ff' }}></div>
-          <p className="mt-4" style={{ color: '#fff' }}>Loading your chatbots...</p>
+      <div className={`page-wrap ${styles.center}`}>
+        <div className={styles.loadingLayout}>
+          <div className={styles.loadingHeader}>
+            <div className={`${styles.skeleton} ${styles.skeletonLabel}`} />
+            <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+            <div className={`${styles.skeleton} ${styles.skeletonText}`} />
+          </div>
+          <div className={styles.loadingStats}>
+            <GlassCard className={styles.loadingCard}>
+              <div className={`${styles.skeleton} ${styles.skeletonLabel}`} />
+              <div className={`${styles.skeleton} ${styles.skeletonValue}`} />
+            </GlassCard>
+            <GlassCard className={styles.loadingCard}>
+              <div className={`${styles.skeleton} ${styles.skeletonLabel}`} />
+              <div className={`${styles.skeleton} ${styles.skeletonValue}`} />
+            </GlassCard>
+            <GlassCard className={styles.loadingCard}>
+              <div className={`${styles.skeleton} ${styles.skeletonLabel}`} />
+              <div className={`${styles.skeleton} ${styles.skeletonValue}`} />
+            </GlassCard>
+          </div>
+          <GlassCard className={styles.loadingListCard}>
+            <div className={`${styles.skeleton} ${styles.skeletonSectionTitle}`} />
+            <div className={styles.loadingRows}>
+              <div className={`${styles.skeleton} ${styles.skeletonRow}`} />
+              <div className={`${styles.skeleton} ${styles.skeletonRow}`} />
+              <div className={`${styles.skeleton} ${styles.skeletonRow}`} />
+            </div>
+          </GlassCard>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={styles.dashboardRoot}>
-      <div className="container">
-        <div className={styles.dashboardHeader}>
-          <div className={styles.dashboardHeaderText}>
-            <h1 className={styles.dashboardTitle}>Welcome back, {user?.firstName || 'User'}!</h1>
-            <p className={styles.dashboardSubtitle}>Manage your chatbots and monitor their performance</p>
-          </div>
-          <div className={styles.dashboardHeaderActions}>
-            <button
-              onClick={handleOpenCreateModal}
-              className={styles.createBtn}
-            >
-              Create Chatbot
-            </button>
-          </div>
+    <div className={`page-wrap ${styles.root}`}>
+      <CompletionOverlay
+        open={showCompletionOverlay}
+        title="All Chatbots Active"
+        subtitle="Every bot in this workspace is now live."
+        onDone={() => setShowCompletionOverlay(false)}
+      />
+
+      <div className={styles.header}>
+        <div>
+          <p className="ui-label">Dashboard</p>
+          <h1 className={styles.title}>Welcome back, {user?.firstName || 'User'}</h1>
+          <p className="ui-muted">Manage your chatbots and integration settings.</p>
         </div>
-        <div className={styles.statsGrid}>
-          <div className={styles.statsCard}>
-            <div className={styles.statsIcon}>
-              <svg className="w-6 h-6" style={{ color: '#000' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-            </div>
-            <div>
-              <p className={styles.statsLabel}>Total Chatbots</p>
-              <p className={styles.statsValue}>{chatbots.length}</p>
-            </div>
-          </div>
-
-          <div className={styles.statsCard}>
-            <div className={styles.statsIcon}>
-              <svg className="w-6 h-6" style={{ color: '#000' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className={styles.statsLabel}>Active Bots</p>
-              <p className={styles.statsValue}>
-                {chatbots.filter(bot => bot.status === 'active').length}
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.statsCard}>
-            <div className={styles.statsIcon}>
-              <svg className="w-6 h-6" style={{ color: '#000' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-              </svg>
-            </div>
-            <div>
-              <p className={styles.statsLabel}>Total Messages</p>
-              <p className={styles.statsValue}>
-                {chatbots.reduce((sum, bot) => sum + bot.message_count, 0)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.card}>
-          <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>Your Chatbots</div>
-            <button
-              onClick={handleOpenCreateModal}
-              className={styles.createBtnSmall}
-            >
-              Create Chatbot
-            </button>
-          </div>
-          <div className={styles.chatbotList}>
-            {chatbots.length === 0 ? (
-              <div className={styles.emptyChatbotCard}>
-                <h3 className={styles.emptyChatbotTitle}>No chatbots</h3>
-                <p className={styles.emptyChatbotSubtitle}>Get started by creating your first chatbot.</p>
-                <button
-                  onClick={handleOpenCreateModal}
-                  className={styles.createBtn}
-                >
-                  Create Your First Chatbot
-                </button>
-              </div>
-            ) : (
-              chatbots.map((chatbot) => (
-                <div key={chatbot.id} className={styles.chatbotCard}>
-                  <div>
-                    <div className={styles.chatbotName}>{chatbot.name}</div>
-                    <span className={chatbot.status === 'active' ? styles.chatbotStatus : styles.chatbotStatus + ' ' + styles.inactive}>{chatbot.status}</span>
-                    <p className={styles.chatbotDesc}>{chatbot.description}</p>
-                    <label className={styles.apiKeyLabel}>API Key</label>
-                    <div className={styles.apiKeyInputRow}>
-                      <input type="text" value={chatbot.api_key} readOnly className={styles.apiKeyInput} />
-                      <button
-                        onClick={(e) => {
-                          copyApiKey(chatbot.api_key);
-                        }}
-                        className={styles.secondaryBtn}
-                      >
-                        Copy
-                      </button>
-                    </div>
-                    <div className={styles.buttonRow}>
-                      <button
-                        onClick={(e) => {
-                          toggleChatbotStatus(chatbot.id, chatbot.status);
-                        }}
-                        className={styles.secondaryBtn}
-                      >
-                        {chatbot.status === 'active' ? 'Deactivate' : 'Activate'}
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          openChatModal(chatbot);
-                        }}
-                        className={styles.secondaryBtn}
-                      >
-                        Test Chat
-                      </button>
-                    </div>
-                  </div>
-                  <div className={styles.buttonRow}>
-                    <button
-                      onClick={(e) => {
-                        setEditKBChatbot(chatbot);
-                        setEditKBValue(chatbot.knowledge_base || '');
-                        setEditKBError('');
-                        setShowEditKBModal(true);
-                      }}
-                      className={styles.secondaryBtn}
-                    >
-                      Edit Knowledge Base
-                    </button>
-                    <button
-                      onClick={() => openIntegrationModal(chatbot)}
-                      className={styles.secondaryBtn}
-                    >
-                      Integration Guide
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (window.confirm(`Are you sure you want to delete ${chatbot.name}? This action cannot be undone.`)) {
-                          deleteChatbot(chatbot.id);
-                        }
-                      }}
-                      className={styles.dangerBtn}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        <div ref={createSectionRef} className={styles.createSectionAnchor} />
-        {/* Create Chatbot Modal */}
-        {showCreateModal && (
-          <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.85)' }}>
-            <div className="rounded-lg p-6 w-full max-w-md" style={{ background: '#000', border: '1px solid #000000ff' }}>
-              <h2 className="text-xl font-semibold mb-4" style={{ color: '#fff' }}>Create New Chatbot</h2>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1" style={{ color: '#fff' }}>
-                    Chatbot Name
-                  </label>
-                  <input
-                    type="text"
-                    value={newChatbot.name}
-                    onChange={(e) => setNewChatbot({ ...newChatbot, name: e.target.value })}
-                    className="input w-full"
-                    style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
-                    placeholder="e.g., Customer Support Bot"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    value={newChatbot.description}
-                    onChange={(e) => setNewChatbot({ ...newChatbot, description: e.target.value })}
-                    className="input w-full"
-                    style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
-                    rows={3}
-                    placeholder="What does this chatbot do?"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Personality
-                  </label>
-                  <select
-                    value={newChatbot.personality}
-                    onChange={(e) => setNewChatbot({ ...newChatbot, personality: e.target.value })}
-                    className="input w-full"
-                    style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
-                  >
-                    <option value="professional">Professional</option>
-                    <option value="friendly">Friendly</option>
-                    <option value="casual">Casual</option>
-                    <option value="formal">Formal</option>
-                    <option value="humorous">Humorous</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Knowledge Base (Optional)
-                  </label>
-                  <textarea
-                    value={newChatbot.knowledgeBase}
-                    onChange={(e) => setNewChatbot({ ...newChatbot, knowledgeBase: e.target.value })}
-                    className="input w-full"
-                    style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
-                    rows={4}
-                    placeholder="Specific information, FAQs, or context for the chatbot..."
-                  />
-                </div>
-              </div>
-
-              <div className="flex gap-3 mt-6">
-                <button
-                  onClick={(e) => {
-                    setShowCreateModal(false);
-                  }}
-                  className={styles.modalCancelBtn}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={(e) => {
-                    handleCreateChatbot();
-                  }}
-                  className={styles.modalCreateBtn}
-                >
-                  Create
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Chat Modal */}
-        {showChatModal && selectedChatbot && (
-          <ChatInterface
-            chatbotId={selectedChatbot.id}
-            chatbotName={selectedChatbot.name}
-            apiKey={selectedChatbot.api_key}
-            onClose={closeChatModal}
-          />
-        )}
-
-        {/* Integration Guide Modal */}
-        {showIntegrationModal && selectedChatbot && (
-          <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.85)' }}>
-            <div className="rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto" style={{ background: '#000', border: '1px solid #fff' }}>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold" style={{ color: '#fff' }}>Integration Guide for {selectedChatbot.name}</h2>
-                <button onClick={closeIntegrationModal} style={{ color: '#fff' }}>
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-medium mb-2" style={{ color: '#fff' }}>Your Integration Details</h3>
-                  <div className="p-4 rounded-lg space-y-2" style={{ background: '#000', border: '1px solid #060606ff' }}>
-                    <div>
-                      <span className="font-medium" style={{ color: '#fff' }}>API Key:</span>
-                      <code className="ml-2 px-2 py-1 rounded text-sm" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>{selectedChatbot.api_key}</code>
-                    </div>
-                    <div>
-                      <span className="font-medium" style={{ color: '#fff' }}>Chatbot ID:</span>
-                      <code className="ml-2 px-2 py-1 rounded text-sm" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>{selectedChatbot.id}</code>
-                    </div>
-                    <div>
-                      <span className="font-medium" style={{ color: '#fff' }}>Supabase URL:</span>
-                      <code className="ml-2 px-2 py-1 rounded text-sm" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>{supabaseUrl}</code>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium mb-2" style={{ color: '#fff' }}>Quick Integration (HTML/JavaScript)</h3>
-                  <div className="p-4 rounded-lg overflow-x-auto" style={{ background: '#000', color: '#fff', border: '1px solid #080808ff' }}>
-                    <pre className="text-sm">
-                      {`<!-- Add this to your website -->
-<div id="chatbot-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-  <button id="chatbot-toggle" style="width: 60px; height: 60px; border-radius: 50%; background: #007bff; color: white; border: none; cursor: pointer; font-size: 24px;">💬</button>
-  
-  <div id="chatbot-container" style="display: none; position: fixed; bottom: 100px; right: 20px; width: 350px; height: 500px; background: white; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
-    <div style="padding: 16px; background: #007bff; color: white; border-radius: 12px 12px 0 0; font-weight: bold;">${selectedChatbot.name}</div>
-    <div id="chatbot-messages" style="flex: 1; padding: 16px; overflow-y: auto; max-height: 350px;">
-      <div style="margin-bottom: 12px; padding: 8px 12px; border-radius: 8px; background: #f5f5f5;">Hello! How can I help you today?</div>
-    </div>
-    <div style="padding: 16px; border-top: 1px solid #eee;">
-      <input type="text" id="message-input" placeholder="Type your message..." style="width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; outline: none;">
-      <button onclick="sendMessage()" style="margin-top: 8px; padding: 8px 16px; background: #000000ff; color: white; border: none; border-radius: 20px; cursor: pointer;">Send</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// Replace with your actual values
-const API_KEY = '${selectedChatbot.api_key}';
-const CHATBOT_ID = '${selectedChatbot.id}';
-const SUPABASE_URL = '${supabaseUrl}';
-
-let isChatbotOpen = false;
-const userId = 'user_' + Math.random().toString(36).substr(2, 9);
-
-document.getElementById('chatbot-toggle').onclick = function() {
-  const container = document.getElementById('chatbot-container');
-  isChatbotOpen = !isChatbotOpen;
-  container.style.display = isChatbotOpen ? 'block' : 'none';
-  
-  if (isChatbotOpen) {
-    document.getElementById('message-input').focus();
-  }
-};
-
-document.getElementById('message-input').onkeypress = function(event) {
-  if (event.key === 'Enter') {
-    sendMessage();
-  }
-};
-
-async function sendMessage() {
-  const input = document.getElementById('message-input');
-  const message = input.value.trim();
-  
-  if (!message) return;
-  
-  addMessage(message, 'user');
-  input.value = '';
-  
-  try {
-    const response = await fetch(\`\${SUPABASE_URL}/functions/v1/chatbot-chat\`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Api-Key': API_KEY
-      },
-      body: JSON.stringify({
-        chatbotId: CHATBOT_ID,
-        message: message,
-        userId: userId
-      })
-    });
-    
-    const data = await response.json();
-    
-    if (data.response) {
-      addMessage(data.response, 'bot');
-    } else {
-      addMessage('Sorry, I encountered an error. Please try again.', 'bot');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    addMessage('Sorry, I encountered an error. Please try again.', 'bot');
-  }
-}
-
-function addMessage(text, sender) {
-  const messagesContainer = document.getElementById('chatbot-messages');
-  const messageDiv = document.createElement('div');
-  messageDiv.style.marginBottom = '12px';
-  messageDiv.style.padding = '8px 12px';
-  messageDiv.style.borderRadius = '8px';
-  messageDiv.style.maxWidth = '80%';
-  
-  if (sender === 'user') {
-    messageDiv.style.background = '#e3f2fd';
-    messageDiv.style.marginLeft = 'auto';
-  } else {
-    messageDiv.style.background = '#f5f5f5';
-  }
-  
-  messageDiv.textContent = text;
-  messagesContainer.appendChild(messageDiv);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-</script>`}
-                    </pre>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-medium mb-2" style={{ color: '#fff' }}>API Endpoint</h3>
-                  <div className="p-4 rounded-lg" style={{ background: '#000', border: '1px solid #050505ff' }}>
-                    <p className="text-sm mb-2" style={{ color: '#fff' }}>
-                      <strong>URL:</strong> <code>{supabaseUrl}/functions/v1/chatbot-chat</code>
-                    </p>
-                    <p className="text-sm mb-2" style={{ color: '#fff' }}>
-                      <strong>Method:</strong> POST
-                    </p>
-                    <p className="text-sm mb-2" style={{ color: '#fff' }}>
-                      <strong>Headers:</strong>
-                    </p>
-                    <pre className="text-sm p-2 rounded" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>
-                      {`Content-Type: application/json
-X-Api-Key: ${selectedChatbot.api_key}`}
-                    </pre>
-                    <p className="text-sm mt-2" style={{ color: '#fff' }}>
-                      <strong>Request Body:</strong>
-                    </p>
-                    <pre className="text-sm p-2 rounded" style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}>
-                      {`{
-  "chatbotId": "${selectedChatbot.id}",
-  "message": "User's message here",
-  "userId": "unique-user-identifier"
-}`}
-                    </pre>
-                  </div>
-                </div>
-
-                <div className="rounded-lg p-4" style={{ background: '#000', border: '1px solid #000000ff' }}>
-                  <h4 className="font-medium mb-2" style={{ color: '#fff' }}>💡 Pro Tips</h4>
-                  <ul className="text-sm space-y-1" style={{ color: '#fff' }}>
-                    <li>• Replace <code>your-project-ref</code> with your actual Supabase project reference</li>
-                    <li>• Customize the styling to match your website's design</li>
-                    <li>• Add error handling for better user experience</li>
-                    <li>• Consider adding loading states while waiting for responses</li>
-                    <li>• Test the integration thoroughly before going live</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {showEditKBModal && editKBChatbot && (
-          <div ref={editKBModalRef} className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.85)' }}>
-            <div className="rounded-lg p-6 w-full max-w-md" style={{ background: '#000', border: '1px solid #000000ff' }}>
-              <h2 className="text-xl font-semibold mb-4" style={{ color: '#fff' }}>Edit Knowledge Base</h2>
-              <textarea
-                className="input w-full mb-4"
-                style={{ background: '#000', color: '#fff', border: '1px solid #000000ff' }}
-                rows={8}
-                value={editKBValue}
-                onChange={e => setEditKBValue(e.target.value)}
-                placeholder="Enter knowledge base content..."
-                disabled={editKBLoading}
-              />
-              {editKBError && <div className="text-sm mb-2" style={{ color: '#fff' }}>{editKBError}</div>}
-              <div className="flex justify-end gap-2">
-                <button
-                  onClick={() => setShowEditKBModal(false)}
-                  className={styles.btn}
-                  disabled={editKBLoading}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={async () => {
-                    setEditKBLoading(true);
-                    setEditKBError('');
-                    try {
-                      const { error } = await supabase
-                        .from('chatbots')
-                        .update({ knowledge_base: editKBValue })
-                        .eq('id', editKBChatbot.id);
-                      if (error) throw error;
-                      setChatbots(chatbots.map(bot => bot.id === editKBChatbot.id ? { ...bot, knowledge_base: editKBValue } : bot));
-                      setShowEditKBModal(false);
-                    } catch (err: any) {
-                      setEditKBError('Failed to update knowledge base.');
-                    } finally {
-                      setEditKBLoading(false);
-                    }
-                  }}
-                  className={styles.fancyBtn}
-                  disabled={editKBLoading}
-                >
-                  {editKBLoading ? 'Saving...' : 'Save'}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <GlassButton variant="primary" onClick={handleOpenCreateModal}>
+          Create Chatbot
+        </GlassButton>
       </div>
+
+      <div className={styles.statsGrid}>
+        <GlassCard className={styles.statCard}>
+          <p className="ui-label">Total Chatbots</p>
+          <strong>{chatbots.length}</strong>
+        </GlassCard>
+        <GlassCard className={styles.statCard}>
+          <p className="ui-label">Active Bots</p>
+          <strong>{chatbots.filter((bot) => bot.status === 'active').length}</strong>
+        </GlassCard>
+        <GlassCard className={styles.statCard}>
+          <p className="ui-label">Total Messages</p>
+          <strong>{chatbots.reduce((sum, bot) => sum + bot.message_count, 0)}</strong>
+        </GlassCard>
+      </div>
+
+      <GlassCard className={styles.listCard}>
+        <div className={styles.listHeader}>
+          <h2>Your Chatbots</h2>
+          <GlassButton variant="secondary" onClick={handleOpenCreateModal}>
+            New Chatbot
+          </GlassButton>
+        </div>
+
+        {chatbots.length === 0 ? (
+          <div className={styles.emptyState}>
+            <h3>No chatbots yet</h3>
+            <p className="ui-muted">Create your first chatbot to start testing.</p>
+            <GlassButton variant="primary" onClick={handleOpenCreateModal}>
+              Create Chatbot
+            </GlassButton>
+          </div>
+        ) : (
+          <div className={styles.chatbotList}>
+            {chatbots.map((chatbot) => (
+              <GlassCard key={chatbot.id} className={styles.chatbotCard}>
+                <div className={styles.rowTop}>
+                  <div>
+                    <h3>{chatbot.name}</h3>
+                    <span className={`${styles.status} ${chatbot.status === 'active' ? styles.active : styles.inactive}`}>
+                      {chatbot.status}
+                    </span>
+                    <p className="ui-muted">{chatbot.description || 'No description provided yet.'}</p>
+                  </div>
+                </div>
+
+                <label className="ui-label">API Key</label>
+                <div className={styles.apiRow}>
+                  <input type="text" value={chatbot.api_key} readOnly className="glass-input" />
+                  <GlassButton
+                    variant="secondary"
+                    onClick={(event) => copyApiKey(chatbot.api_key, event.clientX, event.clientY)}
+                  >
+                    Copy
+                  </GlassButton>
+                </div>
+
+                <div className={styles.actions}>
+                  <GlassButton
+                    variant="secondary"
+                    onClick={(event) => toggleChatbotStatus(chatbot.id, chatbot.status, event.clientX, event.clientY)}
+                  >
+                    {chatbot.status === 'active' ? 'Deactivate' : 'Activate'}
+                  </GlassButton>
+                  <GlassButton variant="secondary" onClick={() => openChatModal(chatbot)}>
+                    Test Chat
+                  </GlassButton>
+                  <GlassButton
+                    variant="secondary"
+                    onClick={() => {
+                      setEditKBChatbot(chatbot);
+                      setEditKBValue(chatbot.knowledge_base || '');
+                      setEditKBError('');
+                      setShowEditKBModal(true);
+                    }}
+                  >
+                    Edit Knowledge Base
+                  </GlassButton>
+                  <GlassButton variant="secondary" onClick={() => openIntegrationModal(chatbot)}>
+                    Integration Guide
+                  </GlassButton>
+                  <GlassButton
+                    variant="danger"
+                    onClick={() => {
+                      if (window.confirm(`Are you sure you want to delete ${chatbot.name}? This action cannot be undone.`)) {
+                        deleteChatbot(chatbot.id);
+                      }
+                    }}
+                  >
+                    Delete
+                  </GlassButton>
+                </div>
+              </GlassCard>
+            ))}
+          </div>
+        )}
+      </GlassCard>
+
+      <div ref={createSectionRef} className={styles.anchor} />
+
+      {showCreateModal && (
+        <div className="modal-overlay">
+          <GlassCard className={`${styles.modal} modal-panel`}>
+            <h2>Create New Chatbot</h2>
+            <div className={styles.formGrid}>
+              <div>
+                <label className="ui-label">Chatbot Name</label>
+                <input
+                  type="text"
+                  value={newChatbot.name}
+                  onChange={(event) => setNewChatbot({ ...newChatbot, name: event.target.value })}
+                  className="glass-input"
+                  placeholder="Customer Support Bot"
+                />
+              </div>
+
+              <div>
+                <label className="ui-label">Description</label>
+                <textarea
+                  value={newChatbot.description}
+                  onChange={(event) => setNewChatbot({ ...newChatbot, description: event.target.value })}
+                  className="glass-textarea"
+                  rows={3}
+                  placeholder="What this chatbot helps with"
+                />
+              </div>
+
+              <div>
+                <label className="ui-label">Personality</label>
+                <select
+                  value={newChatbot.personality}
+                  onChange={(event) => setNewChatbot({ ...newChatbot, personality: event.target.value })}
+                  className="glass-select"
+                >
+                  <option value="professional">Professional</option>
+                  <option value="friendly">Friendly</option>
+                  <option value="casual">Casual</option>
+                  <option value="formal">Formal</option>
+                  <option value="humorous">Humorous</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="ui-label">Knowledge Base</label>
+                <textarea
+                  value={newChatbot.knowledgeBase}
+                  onChange={(event) => setNewChatbot({ ...newChatbot, knowledgeBase: event.target.value })}
+                  className="glass-textarea"
+                  rows={4}
+                  placeholder="FAQs or domain context"
+                />
+              </div>
+            </div>
+
+            <div className={styles.modalActions}>
+              <GlassButton variant="secondary" onClick={() => setShowCreateModal(false)}>
+                Cancel
+              </GlassButton>
+              <GlassButton
+                variant="primary"
+                onClick={(event) => handleCreateChatbot(event.clientX, event.clientY)}
+                disabled={!newChatbot.name.trim()}
+              >
+                Create
+              </GlassButton>
+            </div>
+          </GlassCard>
+        </div>
+      )}
+
+      {showIntegrationModal && selectedChatbot && (
+        <div className="modal-overlay">
+          <GlassCard className={`${styles.modalWide} modal-panel`}>
+            <div className={styles.modalHeaderRow}>
+              <h2>Integration Guide: {selectedChatbot.name}</h2>
+              <GlassButton variant="secondary" onClick={closeIntegrationModal}>
+                Close
+              </GlassButton>
+            </div>
+
+            <div className={styles.integrationBlock}>
+              <p className="ui-label">Integration Details</p>
+              <pre className={styles.pre}>{`API Key: ${selectedChatbot.api_key}
+Chatbot ID: ${selectedChatbot.id}
+Supabase URL: ${supabaseUrl}`}</pre>
+            </div>
+
+            <div className={styles.integrationBlock}>
+              <p className="ui-label">Endpoint</p>
+              <pre className={styles.pre}>{`${supabaseUrl}/functions/v1/chatbot-chat
+Method: POST
+Headers: Content-Type, X-Api-Key`}</pre>
+            </div>
+          </GlassCard>
+        </div>
+      )}
+
+      {showEditKBModal && editKBChatbot && (
+        <div className="modal-overlay">
+          <GlassCard className={`${styles.modal} modal-panel`}>
+            <h2>Edit Knowledge Base</h2>
+            <textarea
+              className="glass-textarea"
+              rows={10}
+              value={editKBValue}
+              onChange={(event) => setEditKBValue(event.target.value)}
+              disabled={editKBLoading}
+            />
+
+            {editKBError && <p className={styles.error}>{editKBError}</p>}
+
+            <div className={styles.modalActions}>
+              <GlassButton variant="secondary" onClick={() => setShowEditKBModal(false)} disabled={editKBLoading}>
+                Cancel
+              </GlassButton>
+              <GlassButton
+                variant="primary"
+                disabled={editKBLoading}
+                onClick={async () => {
+                  setEditKBLoading(true);
+                  setEditKBError('');
+                  try {
+                    const { error } = await supabase
+                      .from('chatbots')
+                      .update({ knowledge_base: editKBValue })
+                      .eq('id', editKBChatbot.id);
+                    if (error) throw error;
+
+                    setChatbots(
+                      chatbots.map((bot) =>
+                        bot.id === editKBChatbot.id ? { ...bot, knowledge_base: editKBValue } : bot
+                      )
+                    );
+                    setShowEditKBModal(false);
+                  } catch {
+                    setEditKBError('Failed to update knowledge base.');
+                  } finally {
+                    setEditKBLoading(false);
+                  }
+                }}
+              >
+                {editKBLoading ? 'Saving...' : 'Save'}
+              </GlassButton>
+            </div>
+          </GlassCard>
+        </div>
+      )}
+
+      {showChatModal && selectedChatbot && (
+        <ChatInterface
+          chatbotId={selectedChatbot.id}
+          chatbotName={selectedChatbot.name}
+          apiKey={selectedChatbot.api_key}
+          onClose={closeChatModal}
+        />
+      )}
     </div>
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ClerkProvider } from '@clerk/clerk-react';
 import { BrowserRouter } from 'react-router-dom';
+import './styles/theme.css';
 import './index.css';
 import App from './App';
 
@@ -11,9 +12,7 @@ if (!CLERK_PUBLISHABLE_KEY) {
   console.warn('Missing Clerk Publishable Key. Please set REACT_APP_CLERK_PUBLISHABLE_KEY in your environment variables.');
 }
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <React.StrictMode>
@@ -23,4 +22,4 @@ root.render(
       </BrowserRouter>
     </ClerkProvider>
   </React.StrictMode>
-); 
+);
