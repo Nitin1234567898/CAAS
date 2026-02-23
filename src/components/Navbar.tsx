@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
             <SignInButton mode="modal">
               <button className="glass-button glass-button--primary">Sign In</button>
             </SignInButton>
-            <Link to="/login" className="glass-button glass-button--secondary">
+            <Link to="/signup" className="glass-button glass-button--secondary">
               Get Started
             </Link>
           </SignedOut>
@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
               <SignInButton mode="modal">
                 <button className="glass-button glass-button--primary">Sign In</button>
               </SignInButton>
-              <Link to="/login" className="glass-button glass-button--secondary" onClick={() => setIsMobileMenuOpen(false)}>
+              <Link to="/signup" className="glass-button glass-button--secondary" onClick={() => setIsMobileMenuOpen(false)}>
                 Get Started
               </Link>
             </SignedOut>

@@ -14,7 +14,7 @@ const HomePage: React.FC = () => {
           Build, tune, and deploy assistants in minutes. Keep full control of personality, knowledge base, and integration flow.
         </p>
         <SignedOut>
-          <Link to="/login" className={`glass-button glass-button--primary ${styles.cta}`}>
+          <Link to="/signup" className={`glass-button glass-button--primary ${styles.cta}`}>
             Get Started Free
           </Link>
         </SignedOut>

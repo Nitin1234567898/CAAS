@@ -7,6 +7,7 @@ import ConfettiCanvas from './features/confetti/ConfettiCanvas';
 import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import IntegrationGuide from './pages/IntegrationGuide';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           />
           <Route path="/integration-guide" element={<IntegrationGuide />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
         </Routes>
       </div>
     </div>
